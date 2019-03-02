@@ -1,42 +1,41 @@
-<?xml version="1.0"?><Ozyegin>
-	<Nodes>
-		<Node id="1" name="Business">
-			<IpAddress>10.100.93.20</IpAddress>
-			<Port>22</Port>
-			<Username>pi</Username>
-			<Password>raspberry</Password>
-			<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
-			<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
-			<RfDutTelnetName>root</RfDutTelnetName>
-			<RfDutTelnetPassword></RfDutTelnetPassword>
-			<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
-			<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
-			<FsoDutTelnetName>root</FsoDutTelnetName>
-			<FsoDutTelnetPassword></FsoDutTelnetPassword>
-		</Node>
-		<Node id="2" name="Engineering">
-			<IpAddress>10.100.93.28</IpAddress>
-			<Port>22</Port>
-			<Username>pi</Username>
-			<Password>raspberry</Password>
-			<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
-			<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
-			<RfDutTelnetName>root</RfDutTelnetName>
-			<RfDutTelnetPassword></RfDutTelnetPassword>
-			<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
-			<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
-			<FsoDutTelnetName>root</FsoDutTelnetName>
-			<FsoDutTelnetPassword></FsoDutTelnetPassword>
-		</Node>
-		<Node id="3" name="Weather">
-			<IpAddress>10.100.93.21</IpAddress>
-			<Username></Username>
-			<Password></Password>
-		</Node>
-		<Node id="4" name="LaserPowerMeter">
-			<IpAddress></IpAddress>
-			<Username></Username>
-			<Password></Password>
-		</Node>
-	</Nodes>
-</Ozyegin>
+<?xml version="1.0"?>
+<Nodes>
+	<Node id="1" name="Business">
+		<IpAddress>10.100.93.20</IpAddress>
+		<Port>22</Port>
+		<Username>pi</Username>
+		<Password>raspberry</Password>
+		<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
+		<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
+		<RfDutTelnetName>root</RfDutTelnetName>
+		<RfDutTelnetPassword></RfDutTelnetPassword>
+		<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
+		<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
+		<FsoDutTelnetName>root</FsoDutTelnetName>
+		<FsoDutTelnetPassword></FsoDutTelnetPassword>
+	</Node>
+	<Node id="2" name="Engineering">
+		<IpAddress>10.100.93.28</IpAddress>
+		<Port>22</Port>
+		<Username>pi</Username>
+		<Password>raspberry</Password>
+		<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
+		<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
+		<RfDutTelnetName>root</RfDutTelnetName>
+		<RfDutTelnetPassword></RfDutTelnetPassword>
+		<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
+		<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
+		<FsoDutTelnetName>root</FsoDutTelnetName>
+		<FsoDutTelnetPassword></FsoDutTelnetPassword>
+	</Node>
+	<Node id="3" name="Weather">
+		<IpAddress>10.100.93.21</IpAddress>
+		<Username></Username>
+		<Password></Password>
+	</Node>
+	<Node id="4" name="LaserPowerMeter">
+		<IpAddress></IpAddress>
+		<Username></Username>
+		<Password></Password>
+	</Node>
+</Nodes>
