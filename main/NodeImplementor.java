@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 public interface NodeImplementor {
-	void setnode();
+	void setnode(String nodeType);
 	void disconnect();
 	void setNodeInformation();
 	default NodeList getNode() {

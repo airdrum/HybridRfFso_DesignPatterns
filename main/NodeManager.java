@@ -6,11 +6,17 @@ public class NodeManager {
 	      if(nodeType == null){
 	         return null;
 	      }		
-	      if(nodeType.equalsIgnoreCase("SERVER")){
-	         return new NodeServer();
+	      if(nodeType.equalsIgnoreCase("RFSERVER")){
+	         return new NodeRfServer();
 	         
-	      } else if(nodeType.equalsIgnoreCase("CLIENT")){
-	         return new NodeClient();
+	      } else if(nodeType.equalsIgnoreCase("RFCLIENT")){
+	         return new NodeRfClient();
+	         
+	      } else if(nodeType.equalsIgnoreCase("FSOSERVER")){
+	         return new NodeFsoServer();
+		         
+	      } else if(nodeType.equalsIgnoreCase("FSOCLIENT")){
+	         return new NodeFsoClient();
 	         
 	      } 
 	      
