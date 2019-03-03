@@ -1,3 +1,5 @@
+import node.NodeImplementor;
+import node.NodeManager;
 
 public class TestLogManager {
 
@@ -23,9 +25,7 @@ public class TestLogManager {
 
 			      System.out.println("**************");
 			      nodeclientFso.setnode("Business");
-			    //call draw method of Circle
-			      //nodeclientRf.setnode();
-			      
+			    
 			      
 			      
 	}

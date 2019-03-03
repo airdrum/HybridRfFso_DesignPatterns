@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <interface id="1" language="java" name="nodefactory.NodeFactory" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/nodefactory/NodeFactory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="213" x="306" y="372"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="2" language="java" name="nodefactory.RfNodeFactory" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeFactory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="213" x="306" y="161"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="3" language="java" name="nodefactory.RemoteNode" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/nodefactory/RemoteNode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="105" x="636" y="372"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="4" language="java" name="nodefactory.RfNodeTcp" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeTcp.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="115" x="559" y="161"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="nodefactory.RfNodeUdp" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeUdp.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="117" x="714" y="161"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="6">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <realization id="7">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <realization id="8">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

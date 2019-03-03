@@ -1,6 +1,3 @@
-/ConfigManager.class
-/example.xml
-/NodeRfClient.class
-/NodeRfServer.class
-/NodeFsoClient.class
-/NodeFsoServer.class
+/throughput/
+/node/
+/nodefactory/

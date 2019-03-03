@@ -10,8 +10,8 @@
 		<RfDutTelnetName>root</RfDutTelnetName>
 		<RfDutTelnetPassword></RfDutTelnetPassword>
 		<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
-		<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
-		<FsoDutTelnetName>root</FsoDutTelnetName>
+		<FsoDutIpAddress>192.168.100.220</FsoDutIpAddress>
+		<FsoDutTelnetName></FsoDutTelnetName>
 		<FsoDutTelnetPassword></FsoDutTelnetPassword>
 	</Node>
 	<Node id="2" name="Engineering">
@@ -19,13 +19,13 @@
 		<Port>22</Port>
 		<Username>pi</Username>
 		<Password>raspberry</Password>
-		<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
+		<RfInterfaceIpAddress>192.168.2.215</RfInterfaceIpAddress>
 		<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
 		<RfDutTelnetName>root</RfDutTelnetName>
 		<RfDutTelnetPassword></RfDutTelnetPassword>
-		<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
+		<FsoInterfaceIpAddress>192.168.100.11</FsoInterfaceIpAddress>
 		<FsoDutIpAddress>192.168.100.221</FsoDutIpAddress>
-		<FsoDutTelnetName>root</FsoDutTelnetName>
+		<FsoDutTelnetName></FsoDutTelnetName>
 		<FsoDutTelnetPassword></FsoDutTelnetPassword>
 	</Node>
 	<Node id="3" name="Weather">
