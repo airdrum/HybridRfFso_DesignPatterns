@@ -6,7 +6,7 @@
 		<Username>pi</Username>
 		<Password>raspberry</Password>
 		<RfInterfaceIpAddress>192.168.2.177</RfInterfaceIpAddress>
-		<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
+		<RfDutIpAddress>192.168.2.2</RfDutIpAddress>
 		<RfDutTelnetName>root</RfDutTelnetName>
 		<RfDutTelnetPassword></RfDutTelnetPassword>
 		<FsoInterfaceIpAddress>192.168.100.21</FsoInterfaceIpAddress>
@@ -20,7 +20,7 @@
 		<Username>pi</Username>
 		<Password>raspberry</Password>
 		<RfInterfaceIpAddress>192.168.2.215</RfInterfaceIpAddress>
-		<RfDutIpAddress>192.168.2.176</RfDutIpAddress>
+		<RfDutIpAddress>192.168.2.1</RfDutIpAddress>
 		<RfDutTelnetName>root</RfDutTelnetName>
 		<RfDutTelnetPassword></RfDutTelnetPassword>
 		<FsoInterfaceIpAddress>192.168.100.11</FsoInterfaceIpAddress>
