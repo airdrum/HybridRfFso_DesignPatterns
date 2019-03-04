@@ -124,7 +124,7 @@ public class RfNodeTcp implements RemoteNode {
              	   this.m_remoteIpAddress = eElement.getElementsByTagName("IpAddress").item(0).getTextContent();
              	   this.m_remotePassword = eElement.getElementsByTagName("Password").item(0).getTextContent();
              	   this.m_remoteUserName = eElement.getElementsByTagName("Username").item(0).getTextContent();
-             	   this.m_interfaceIpAddress = eElement.getElementsByTagName("FsoInterfaceIpAddress").item(0).getTextContent();
+             	   this.m_interfaceIpAddress = eElement.getElementsByTagName("RfInterfaceIpAddress").item(0).getTextContent();
              	   this.m_dutIpAddress = eElement.getElementsByTagName("RfDutIpAddress").item(0).getTextContent();
              	   this.m_dutTelnetName = eElement.getElementsByTagName("RfDutTelnetName").item(0).getTextContent();
              	   this.m_dutTelnetPassword = eElement.getElementsByTagName("RfDutTelnetPassword").item(0).getTextContent();
