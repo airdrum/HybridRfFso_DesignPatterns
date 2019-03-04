@@ -1,5 +1,9 @@
 package nodefactory;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
+import org.json.simple.JSONObject;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,46 +31,73 @@ public class FsoNodeTcp implements RemoteNode {
 	private String m_fsoDutIpAddress;
 	private String m_fsoDutTelnetName;
 	private String m_fsoDutTelnetPassword;
+	private JSONObject m_serverObject = null;
+	private JSONObject m_clientObject = null;
 	public FsoNodeTcp(String direction) {
-		
+		m_serverObject =  new JSONObject();
+		m_clientObject =  new JSONObject();
 		direction = direction.toUpperCase();
 		this.m_direction = direction;
 		if(direction.equals("ENGTOBUS")) {
+
+		   
+			this.m_protocol = TCP;
 			setnode("Business");
-			this.setM_serverUserName(getM_username());
-			this.setM_serverIpAddress(getM_ipAddress());
-			this.setM_serverPassword(getM_password());
 			this.m_server = "Business";
+			m_serverObject.put("name","server");
+			m_serverObject.put("location",this.m_server);
+			m_serverObject.put("interfaceType","FSO");
+			m_serverObject.put("protocol",TCP);
+			m_serverObject.put("serverUsername",getM_username());
+			m_serverObject.put("serverIpAddress",getM_ipAddress());
+			m_serverObject.put("serverPassword",getM_password());
+			
+			
 
 			setnode("Engineering");
-			this.setM_clientUserName(getM_username());
-			this.setM_clientIpAddress(getM_ipAddress());
-			this.setM_clientPassword(getM_password());
 			this.m_client = "Engineering";
-			this.m_protocol = TCP;
+			m_clientObject.put("name","client");
+			m_clientObject.put("location",this.m_client);
+			m_clientObject.put("interfaceType","FSO");
+			m_clientObject.put("protocol",TCP);
+			m_clientObject.put("clientUsername",getM_username());
+			m_clientObject.put("clientIpAddress",getM_ipAddress());
+			m_clientObject.put("clientPassword",getM_password());
+			
 		}else if(direction.equals("BUSTOENG")) {
-			this.m_server = "Engineering";
-			this.m_client = "Business";
 			this.m_protocol = TCP;
+			setnode("Engineering");
+			this.m_server = "Engineering";
+			m_serverObject.put("name","server");
+			m_serverObject.put("location",this.m_server);
+			m_serverObject.put("interfaceType","FSO");
+			m_serverObject.put("protocol",TCP);
+			m_serverObject.put("serverUsername",getM_username());
+			m_serverObject.put("serverIpAddress",getM_ipAddress());
+			m_serverObject.put("serverPassword",getM_password());
+			
+			
+
+			setnode("Business");
+			this.m_client = "Business";
+			m_clientObject.put("name","client");
+			m_clientObject.put("location",this.m_client);
+			m_clientObject.put("interfaceType","FSO");
+			m_clientObject.put("protocol",TCP);
+			m_clientObject.put("clientUsername",getM_username());
+			m_clientObject.put("clientIpAddress",getM_ipAddress());
+			m_clientObject.put("clientPassword",getM_password());
 		}
 	}
 
 	@Override
-	public void getServer() {
-		// TODO Auto-generated method stub
-		System.out.println(this.m_protocol + " " + FSO +" SERVER: m_direction: " + this.m_direction);
-		System.out.println(this.m_protocol + " " + FSO +" SERVER: m_server: " + this.m_server);
-		System.out.println(this.m_protocol + " " + FSO +" SERVER: m_client: " + this.m_client);
+	public JSONObject getServer() {
+		return m_serverObject;
 	}
 
 	@Override
-	public void getClient() {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-		
-		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_direction: " + this.m_direction);
-		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_server: " + this.m_server);
-		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_client: " + this.m_client);
+	public JSONObject getClient() {
+		return m_clientObject;
 	}
 	
 	public void setnode(String nodeType) {
@@ -95,23 +126,11 @@ public class FsoNodeTcp implements RemoteNode {
              	   
              	                  
                 }
-// 	               m_ipAddress = eElement.getElementsByTagName("IpAddress").item(0).getTextContent();
-// 	               m_username = eElement.getElementsByTagName("Username").item(0).getTextContent();
-// 	               m_password = eElement.getElementsByTagName("Password").item(0).getTextContent();
+
                }
           }
  		
- 		System.out.println(nodeType + " ipAddress: " +getM_ipAddress());
- 		System.out.println(nodeType + " username: " +getM_username());
- 		System.out.println(nodeType + " password: " +getM_password());
- 		System.out.println(nodeType + " rfInterfaceIpAddress: " +getM_rfInterfaceIpAddress());
- 		System.out.println(nodeType + " rfDutIpAddress: " +getM_rfDutIpAddress());
- 		System.out.println(nodeType + " rfDutTelnetName: " +getM_rfDutTelnetName());
- 		System.out.println(nodeType + " rfDutTelnetPassword: " +getM_rfDutTelnetPassword());
- 		System.out.println(nodeType + " fsoInterfaceIpAddress: " +getM_fsoInterfaceIpAddress());
- 		System.out.println(nodeType + " fsoDutIpAddress: " +getM_fsoDutIpAddress());
- 		System.out.println(nodeType + " fsoDutTelnetName: " +getM_fsoDutTelnetName());
- 		System.out.println(nodeType + " fsoDutTelnetPassword: " +getM_fsoDutTelnetPassword());
+ 	
 	}
 
 

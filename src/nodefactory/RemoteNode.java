@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.json.simple.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -16,8 +17,8 @@ public interface RemoteNode {
 	public static final String FSO = "FSO";
 	public static final String UDP = "UDP";
 	public static final String TCP = "TCP";
-	void getServer();
-	void getClient();
+	JSONObject getServer();
+	JSONObject getClient();
 	default NodeList getNode() {
 		File inputFile = new File("config\\nodes.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -40,4 +41,5 @@ public interface RemoteNode {
         return nList;
     }
 	void setnode(String nodeType);
+	
 }
