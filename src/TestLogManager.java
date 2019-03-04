@@ -1,32 +1,34 @@
-import node.NodeImplementor;
-import node.NodeManager;
+import org.json.JSONObject;
+
+import config.TestConfig;
+import nodefactory.FsoNodeFactory;
+import nodefactory.NodeFactory;
+import nodefactory.RemoteNode;
+import nodefactory.RfNodeFactory;
 
 public class TestLogManager {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-				NodeManager nodeFactory = new NodeManager();
-				
-			      //RF interfaces.
-			      NodeImplementor nodeserverRf = nodeFactory.getNode("RFSERVER");
-			      NodeImplementor nodeclientRf = nodeFactory.getNode("RFCLIENT");
-			      //RF interfaces.
-			      NodeImplementor nodeserverFso = nodeFactory.getNode("FSOSERVER");
-			      NodeImplementor nodeclientFso = nodeFactory.getNode("FSOCLIENT");
-			      //call draw method of Circle
-			      System.out.println("**************");
-			      nodeserverRf.setnode("Engineering");
+	public TestLogManager() {
+		NodeFactory myRfNodeFactory,myFsoNodeFactory;
+		RemoteNode fsoNodeTcpSettings, rfNodeUdpSettings;
+		TestConfig testConfig = new TestConfig();
+		JSONObject testSettings = null;
+		myFsoNodeFactory = new FsoNodeFactory();
+		myRfNodeFactory = new RfNodeFactory();
 
-			      System.out.println("**************");
-			      nodeclientRf.setnode("Business");
-
-			      System.out.println("**************");
-			      nodeserverFso.setnode("Engineering");
-
-			      System.out.println("**************");
-			      nodeclientFso.setnode("Business");
-			    
-			      
-			      
+		/*
+		 * direction
+		 * protocol
+		 * interface
+		 */
+		
+		testSettings = testConfig.getTestConfig();
+		JSONObject tests = (JSONObject) testSettings.get("Ozyegin");
+		JSONObject test = (JSONObject) tests.get("Tests");
+		System.out.println(test);
+		fsoNodeTcpSettings = myFsoNodeFactory.createNode("ENGTOBUS", "TCP");
+		rfNodeUdpSettings = myRfNodeFactory.createNode("BUSTOENG", "UDP");
+		
 	}
+
 }

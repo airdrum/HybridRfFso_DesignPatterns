@@ -1,101 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="nodefactory.FsoNodeFactory" project="HybridRfFso_DesignPatterns" 
+  <class id="1" language="java" name="HybridRfFso" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/HybridRfFso.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="113" x="36" y="230"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="TestManager" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/TestManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="98" x="189" y="230"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="TestLogManager" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/TestLogManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="119" x="327" y="230"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="config.ConfigFactory" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/config/ConfigFactory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="102" x="410" y="-75"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="config.Config" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/config/Config.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="87" x="552" y="-75"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="config.TestConfig" project="HybridRfFso_DesignPatterns" 
+    file="/HybridRfFso_DesignPatterns/src/config/TestConfig.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="161" x="679" y="-75"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="nodefactory.FsoNodeFactory" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/FsoNodeFactory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="213" x="549" y="14"/>    
+    <position height="99" width="213" x="657" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="nodefactory.FsoNodeTcp" project="HybridRfFso_DesignPatterns" 
+  <class id="8" language="java" name="nodefactory.FsoNodeTcp" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/FsoNodeTcp.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="167" x="1055" y="14"/>    
+    <position height="279" width="167" x="1163" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="nodefactory.FsoNodeUdp" project="HybridRfFso_DesignPatterns" 
+  <class id="9" language="java" name="nodefactory.FsoNodeUdp" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/FsoNodeUdp.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="167" x="1262" y="14"/>    
+    <position height="279" width="167" x="1370" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="4" language="java" name="nodefactory.NodeFactory" project="HybridRfFso_DesignPatterns" 
+  <interface id="10" language="java" name="nodefactory.NodeFactory" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/NodeFactory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="81" width="213" x="676" y="333"/>    
+    <position height="81" width="213" x="784" y="534"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="5" language="java" name="nodefactory.RfNodeFactory" project="HybridRfFso_DesignPatterns" 
+  <class id="11" language="java" name="nodefactory.RfNodeFactory" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeFactory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="213" x="802" y="14"/>    
+    <position height="99" width="213" x="910" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="6" language="java" name="nodefactory.RemoteNode" project="HybridRfFso_DesignPatterns" 
+  <interface id="12" language="java" name="nodefactory.RemoteNode" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/RemoteNode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="189" width="166" x="1366" y="333"/>    
+    <position height="189" width="166" x="1474" y="534"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="7" language="java" name="nodefactory.RfNodeTcp" project="HybridRfFso_DesignPatterns" 
+  <class id="13" language="java" name="nodefactory.RfNodeTcp" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeTcp.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="167" x="1469" y="14"/>    
+    <position height="279" width="167" x="1577" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="nodefactory.RfNodeUdp" project="HybridRfFso_DesignPatterns" 
+  <class id="14" language="java" name="nodefactory.RfNodeUdp" project="HybridRfFso_DesignPatterns" 
     file="/HybridRfFso_DesignPatterns/src/nodefactory/RfNodeUdp.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="167" x="1676" y="14"/>    
+    <position height="279" width="167" x="1784" y="215"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <realization id="9">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="10">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="11">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="12">    
+  <realization id="15">    
     <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="12"/>  
   </realization>  
-  <realization id="13">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
+  <realization id="16">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
   </realization>  
-  <realization id="14">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
+  <realization id="17">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <realization id="18">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="19">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <realization id="20">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
   </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
