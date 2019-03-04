@@ -11,12 +11,10 @@ public class HybridRfFso {
 		myFsoNodeFactory = new FsoNodeFactory();
 		myRfNodeFactory = new RfNodeFactory();
 		fsoNodeTcp = myFsoNodeFactory.createNode("ENGTOBUS", "TCP");
-		rfNodeUdp = myRfNodeFactory.createNode("BUSTOENG", "UDP");
+		rfNodeUdp = myRfNodeFactory.createNode("ENGTOBUS", "TCP");
 		System.out.println("*****");
-		System.out.println(fsoNodeTcp.getServer());
-		System.out.println(fsoNodeTcp.getClient());
-		System.out.println(rfNodeUdp.getServer());
-		System.out.println(rfNodeUdp.getClient());
+		System.out.println(fsoNodeTcp.getNodeObject());
+		System.out.println(rfNodeUdp.getNodeObject());
 		
 		
 		

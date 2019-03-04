@@ -17,8 +17,7 @@ public interface RemoteNode {
 	public static final String FSO = "FSO";
 	public static final String UDP = "UDP";
 	public static final String TCP = "TCP";
-	JSONObject getServer();
-	JSONObject getClient();
+	JSONObject getNodeObject();
 	default NodeList getNode() {
 		File inputFile = new File("config\\nodes.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
