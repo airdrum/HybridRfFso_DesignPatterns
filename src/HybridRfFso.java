@@ -7,13 +7,11 @@ public class HybridRfFso {
 		NodeFactory myRfNodeFactory,myFsoNodeFactory;
 		RemoteNode fsoNodeTcp;
 		myFsoNodeFactory = new FsoNodeFactory();
-		fsoNodeTcp = myFsoNodeFactory.createNode("BUSTOENG", "TCP");
+		fsoNodeTcp = myFsoNodeFactory.createNode("ENGTOBUS", "TCP");
+		
 		fsoNodeTcp.getClient();
 		fsoNodeTcp.getServer();
 		fsoNodeTcp.getNode();
-		System.out.println("***********");
-		fsoNodeTcp.setnode("Engineering");
-		fsoNodeTcp.setnode("Business");
 
 	}
 

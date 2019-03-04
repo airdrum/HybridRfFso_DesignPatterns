@@ -7,7 +7,13 @@ import org.w3c.dom.NodeList;
 public class FsoNodeTcp implements RemoteNode {
 	private NodeList nodeServer;
 	private String m_server;
+	private String m_serverIpAddress;
+	private String m_serverUserName;
+	private String m_serverPassword;
 	private String m_client;
+	private String m_clientIpAddress;
+	private String m_clientUserName;
+	private String m_clientPassword;
 	private String m_direction;
 	private String m_protocol;
 	private String m_ipAddress;
@@ -26,7 +32,16 @@ public class FsoNodeTcp implements RemoteNode {
 		direction = direction.toUpperCase();
 		this.m_direction = direction;
 		if(direction.equals("ENGTOBUS")) {
+			setnode("Business");
+			this.setM_serverUserName(getM_username());
+			this.setM_serverIpAddress(getM_ipAddress());
+			this.setM_serverPassword(getM_password());
 			this.m_server = "Business";
+
+			setnode("Engineering");
+			this.setM_clientUserName(getM_username());
+			this.setM_clientIpAddress(getM_ipAddress());
+			this.setM_clientPassword(getM_password());
 			this.m_client = "Engineering";
 			this.m_protocol = TCP;
 		}else if(direction.equals("BUSTOENG")) {
@@ -48,6 +63,7 @@ public class FsoNodeTcp implements RemoteNode {
 	public void getClient() {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
+		
 		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_direction: " + this.m_direction);
 		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_server: " + this.m_server);
 		System.out.println(this.m_protocol + " " + FSO +" CLIENT: m_client: " + this.m_client);
@@ -185,6 +201,54 @@ public class FsoNodeTcp implements RemoteNode {
 
 	public void setM_rfDutTelnetName(String m_rfDutTelnetName) {
 		this.m_rfDutTelnetName = m_rfDutTelnetName;
+	}
+
+	public String getM_clientIpAddress() {
+		return m_clientIpAddress;
+	}
+
+	public void setM_clientIpAddress(String m_clientIpAddress) {
+		this.m_clientIpAddress = m_clientIpAddress;
+	}
+
+	public String getM_clientUserName() {
+		return m_clientUserName;
+	}
+
+	public void setM_clientUserName(String m_clientUserName) {
+		this.m_clientUserName = m_clientUserName;
+	}
+
+	public String getM_clientPassword() {
+		return m_clientPassword;
+	}
+
+	public void setM_clientPassword(String m_clientPassword) {
+		this.m_clientPassword = m_clientPassword;
+	}
+
+	public String getM_serverIpAddress() {
+		return m_serverIpAddress;
+	}
+
+	public void setM_serverIpAddress(String m_serverIpAddress) {
+		this.m_serverIpAddress = m_serverIpAddress;
+	}
+
+	public String getM_serverPassword() {
+		return m_serverPassword;
+	}
+
+	public void setM_serverPassword(String m_serverPassword) {
+		this.m_serverPassword = m_serverPassword;
+	}
+
+	public String getM_serverUserName() {
+		return m_serverUserName;
+	}
+
+	public void setM_serverUserName(String m_serverUserName) {
+		this.m_serverUserName = m_serverUserName;
 	}
 
 	
