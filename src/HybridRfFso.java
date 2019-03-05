@@ -12,7 +12,8 @@ public class HybridRfFso {
 		// TODO Auto-grenerated method stub
 		TestLogManager tManager = new TestLogManager();
 		
-		
+		int samet = 0;
+		samet++;
 
 	}
 
