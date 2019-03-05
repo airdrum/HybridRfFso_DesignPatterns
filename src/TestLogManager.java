@@ -1,44 +1,27 @@
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.*;
 import config.TestConfig;
-import nodefactory.FsoNodeFactory;
-import nodefactory.NodeFactory;
-import nodefactory.RemoteNode;
-import nodefactory.RfNodeFactory;
-
 public class TestLogManager {
-
+	private ArrayList<JSONObject> testItems = null;
+	
 	public TestLogManager() {
-		NodeFactory myRfNodeFactory,myFsoNodeFactory;
-		RemoteNode fsoNodeTcpSettings, rfNodeUdpSettings;
-		TestConfig testConfig = new TestConfig();
-		JSONObject testSettings = null;
-		myFsoNodeFactory = new FsoNodeFactory();
-		myRfNodeFactory = new RfNodeFactory();
-
-		/*
-		 * direction
-		 * protocol
-		 * interface
-		 */
-
-		testSettings = testConfig.getTestConfig();
 		
+		JSONObject testSettings = null;
+		TestConfig testConfig = new TestConfig();
+		testSettings = testConfig.getTestConfig();
+		this.testItems = new ArrayList<JSONObject>();
 		JSONObject obj = (JSONObject) testSettings.get("Ozyegin");
 		JSONObject pageName = (JSONObject) obj.get("Tests");
-		JSONObject test = (JSONObject) pageName.get("Test");
-		JSONArray arr = obj.getJSONArray("posts");
-		for (int i = 0; i < arr.length(); i++)
-		{
-		    String post_id = arr.getJSONObject(i).getString("post_id");
-		  
+		JSONArray arr = (JSONArray) pageName.get("Test");
+		for (int i = 0; i < arr.length(); i++) {
+			testItems.add(i, (JSONObject) arr.get(i));
 		}
-		
-		fsoNodeTcpSettings = myFsoNodeFactory.createNode("ENGTOBUS", "TCP");
-		rfNodeUdpSettings = myRfNodeFactory.createNode("BUSTOENG", "UDP");
-		
+	
+	}
+	
+	public ArrayList<JSONObject> getTestItems(){
+		return this.testItems;
 	}
 
 }

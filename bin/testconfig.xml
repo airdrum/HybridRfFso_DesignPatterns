@@ -1,19 +1,39 @@
 <?xml version="1.0"?><Ozyegin>
 	<Tests>
 		<Test id="1">
-			<RfTransmissionProtocol>UDP</RfTransmissionProtocol>
-			<RfServer>Engineering</RfServer>
-			<RfClient>Business</RfClient>
-			<FsoTransmissionProtocol></FsoTransmissionProtocol>
-			<FsoServer></FsoServer>
-			<FsoClient></FsoClient>
-			<HardSwitchingTransmissionProtocol></HardSwitchingTransmissionProtocol>
-			<HardSwitchingServer></HardSwitchingServer>
-			<HardSwitchingClient></HardSwitchingClient>
-			<SoftSwitchingTransmissionProtocol></SoftSwitchingTransmissionProtocol>
-			<SoftSwitchingServer></SoftSwitchingServer>
-			<SoftSwitchingClient></SoftSwitchingClient>
+			<TransmissionProtocol>UDP</TransmissionProtocol>
+			<TransmissionDirection>ENGTOBUS</TransmissionDirection>
 			<TransmissionType>RF</TransmissionType>
+			<TimeDuration>999999</TimeDuration>
+			<TimeStep>1</TimeStep>
+			<PlotOption>yes</PlotOption>
+			<WeatherData>yes</WeatherData>
+			<LogOutputType>JSON</LogOutputType>
+		</Test>
+		<Test id="2">
+			<TransmissionProtocol>TCP</TransmissionProtocol>
+			<TransmissionDirection>BUSTOENG</TransmissionDirection>
+			<TransmissionType>FSO</TransmissionType>
+			<TimeDuration>999999</TimeDuration>
+			<TimeStep>1</TimeStep>
+			<PlotOption>yes</PlotOption>
+			<WeatherData>yes</WeatherData>
+			<LogOutputType>JSON</LogOutputType>
+		</Test>
+		<Test id="3">
+			<TransmissionProtocol>TCP</TransmissionProtocol>
+			<TransmissionDirection>BUSTOENG</TransmissionDirection>
+			<TransmissionType>RFFSO</TransmissionType>
+			<TimeDuration>999999</TimeDuration>
+			<TimeStep>1</TimeStep>
+			<PlotOption>yes</PlotOption>
+			<WeatherData>yes</WeatherData>
+			<LogOutputType>JSON</LogOutputType>
+		</Test>
+		<Test id="4">
+			<TransmissionProtocol>TCP</TransmissionProtocol>
+			<TransmissionDirection>ENGTOBUS</TransmissionDirection>
+			<TransmissionType>RFFSO</TransmissionType>
 			<TimeDuration>999999</TimeDuration>
 			<TimeStep>1</TimeStep>
 			<PlotOption>yes</PlotOption>

@@ -1,7 +1,7 @@
 package nodefactory;
 
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,7 +29,6 @@ public class FsoNodeUdp implements RemoteNode {
 	private String m_dutTelnetName;
 	private String m_dutTelnetPassword;
 	
-	@SuppressWarnings("unchecked")
 	public FsoNodeUdp(String direction) {
 		m_nodeObject =  new JSONObject();
 		direction = direction.toUpperCase();
