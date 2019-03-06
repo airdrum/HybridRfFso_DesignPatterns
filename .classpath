@@ -5,6 +5,7 @@
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="src" path="config"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/json-20170516.jar" sourcepath="lib/json-20170516.jar"/>
+	<classpathentry kind="lib" path="lib/json-20170516.jar"/>
+	<classpathentry kind="lib" path="lib/jsch-0.1.54.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

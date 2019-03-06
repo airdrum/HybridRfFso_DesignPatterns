@@ -29,7 +29,6 @@ public class RfNodeTcp implements RemoteNode {
 	private String m_dutTelnetName;
 	private String m_dutTelnetPassword;
 	
-	@SuppressWarnings("unchecked")
 	public RfNodeTcp(String direction) {
 		m_nodeObject =  new JSONObject();
 		direction = direction.toUpperCase();
