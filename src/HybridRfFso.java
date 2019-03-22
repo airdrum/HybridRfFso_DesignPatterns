@@ -116,7 +116,9 @@ public class HybridRfFso {
 		    		",FSO:"+jsonout.get("FSO")+
 		    		",RF:"+jsonout.get("RF")+
 		    		",SolarRadiation:"+jsonout.get("SolarRadiation")+
-		    		",WindSpeed:"+jsonout.get("WindSpeed")); 
+		    		",WindSpeed:"+jsonout.get("WindSpeed")+
+		    		",WindDirection:"+jsonout.get("WindDirection")+
+		    		",OutsideTemperature:"+jsonout.get("OutsideTemperature")); 
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
 		}
