@@ -62,12 +62,17 @@ public class HybridRfFso {
 		    String currentTime = df.format(date);
 			JSONObject objName = new JSONObject();
 			try {
-				
+				fsostr = sshMngrfso.recvData();
 			}catch (Exception e) {
 				// TODO: handle exception
+				fsostr = "0.0";
 			}
-			rfstr = sshMngrrf.recvData();
-			fsostr = sshMngrfso.recvData();
+			try {
+				rfstr = sshMngrrf.recvData();
+			}catch (Exception e) {
+				rfstr = "0.0";
+			}
+			
 			
 			for (int i = 0; i < fsostr.split("\r\n").length; i++) {
 				String string = fsostr.split("\r\n")[i];

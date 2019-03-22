@@ -24,14 +24,10 @@ public class WeatherClass {
 				init();
 			}
 		  private void init() {
-			  try {
+			  	try {
 					socket = new Socket("10.100.93.21", 20108);
-				} catch (UnknownHostException e4) {
-					// TODO Auto-generated catch block
-					e4.printStackTrace();
-				} catch (IOException e4) {
-					// TODO Auto-generated catch block
-					e4.printStackTrace();
+				} catch (Exception e) {
+					
 				}
 				
 				try {
@@ -45,7 +41,7 @@ public class WeatherClass {
 					output = new DataOutputStream(socket.getOutputStream());
 				} catch (IOException e4) {
 					// TODO Auto-generated catch block
-					e4.printStackTrace();
+					//e4.printStackTrace();
 				}
 				
 			}
@@ -116,7 +112,7 @@ public class WeatherClass {
 				objName.writeJSONString(out);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 		      
 		      String jsonText = out.toString();
@@ -126,7 +122,7 @@ public class WeatherClass {
 		      //collection.insert(dbObject);
 
 			    try {
-					Thread.sleep(250);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
