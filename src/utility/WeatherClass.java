@@ -46,7 +46,8 @@ public class WeatherClass {
 				
 			}
 		  private static int[] dataLengths = { 9,11,13,15,17,21,39,49,51,53,111 };
-		  
+
+		  private static boolean weatherRetval = false;
 		  private static float[] dataMultipliers = { 0.001f, 0.1f,1,0.1f,1,1,1,0.01f,1,1,1 };
 		  static float[] outputArray = new float[dataLengths.length];
 		  private static Socket socket = null;
@@ -84,7 +85,7 @@ public class WeatherClass {
 		  private static String getAge() {return String.valueOf(outputArray[10]);}
 		
 		  
-		  public static DBObject getWeatherDataDBObject()
+		  public  DBObject getWeatherDataDBObject()
 		  {
 		
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -112,15 +113,15 @@ public class WeatherClass {
 				objName.writeJSONString(out);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 		      
 		      String jsonText = out.toString();
-
+	
 			    DBObject dbObject = (DBObject)JSON.parse(jsonText);
 		      //System.out.print(jsonText);
 		      //collection.insert(dbObject);
-
+	
 			    try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -137,31 +138,42 @@ public class WeatherClass {
 				return dbObject;
 
 			}
-			
+			public void clearWeatherArray() {
+				try {
+					output.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			public boolean setWeatherOutputData()
 			{
-//				 	try {
-//						output.write(socketMAC_addr);
-//					} catch (IOException e2) {
-//						// TODO Auto-generated catch block
-//						e2.printStackTrace();
-//					}
-				try {
+			 	try {
 					output.write(socketMAC_addr);
-				} catch (IOException e1) {
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					try {
+						output.flush();
+						output.write(socketMAC_addr);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				    String[] batch = new String[129];
-				    String samet="";
-				    for (int i = 0; i < 129; i++) {
-				    	try {
-				    		batch[i] = Integer.toHexString(input.read());
-				    		//samet=samet+batch[i].toString()+"-";
-				    		//System.out.print(batch[i]+ "-");
-						} catch (Exception e) {
-							//if (++count == maxTries) throw e;
-						}
-				    	
-				    }
+	
+			    String[] batch = new String[129];
+			    String samet="";
+			    for (int i = 0; i < 129; i++) {
+			    	try {
+			    		batch[i] = Integer.toHexString(input.read());
+			    		//samet=samet+batch[i].toString()+"-";
+			    		//System.out.print(batch[i]+ "-");
+					} catch (Exception e) {
+						//if (++count == maxTries) throw e;
+					}
+			    }
+
+		    	//System.out.println();
 				if(getWeatherArray(batch))
 					return true;
 				else

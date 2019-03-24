@@ -33,30 +33,32 @@ public class HybridRfFso {
 		DBObject jsonout = null;
 
 		
-		//SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+		SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
 		SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
 		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
-		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t9999999 -p5000 &");
-		try {
-			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t9999999 -p5000 &"});
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t9999999 -p5000 &");
+//		try {
+//			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t9999999 -p5000 &"});
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.2.177 -u -b50M -i1 -t60 -p5000&");
 		
 		
 //		for (int i = 0; i < settings.size(); i++) {
 //			System.out.println(settings.get(i));
 //		}
-    
+		WeatherClass weather = new WeatherClass();
 		String fsostr,rfstr,fsoparse="",rfparse="";
 		while(true) {
 			fsoparse="";
 			rfparse="";
-			WeatherClass weather = new WeatherClass();
+			weather.clearWeatherArray();
+			weather.setWeatherOutputData();
+		    jsonout = weather.getWeatherDataDBObject();
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Date date = new Date();
 		    String currentTime = df.format(date);
@@ -66,48 +68,55 @@ public class HybridRfFso {
 			}catch (Exception e) {
 				// TODO: handle exception
 				fsostr = "0.0";
+				fsoparse = "0.0";
 			}
 			try {
 				rfstr = sshMngrrf.recvData();
 			}catch (Exception e) {
 				rfstr = "0.0";
+				rfparse ="0.0";
 			}
 			
-			
-			for (int i = 0; i < fsostr.split("\r\n").length; i++) {
-				String string = fsostr.split("\r\n")[i];
-
-				 Matcher m = Pattern.compile(
-                         Pattern.quote("Bytes")
-                         + "(.*?)"
-                         + Pattern.quote("bits")
-                ).matcher(string);
-				while(m.find()){
-					fsoparse = m.group(1);
-					 //System.out.println("FSO: "+fsoparse);
-					 //here you insert 'match' into the list
-				}
-			}	
-			for (int i = 0; i < rfstr.split("\r\n").length; i++) {
-				String string = rfstr.split("\r\n")[i];
-
-				 Matcher m = Pattern.compile(
-                         Pattern.quote("Bytes")
-                         + "(.*?)"
-                         + Pattern.quote("bits")
-                ).matcher(string);
-				while(m.find()){
-					 rfparse = m.group(1);
-					 //System.out.println("RF: "+rfparse);
-					 //here you insert 'match' into the list
-				}
+			if(!(fsostr=="0.0")) {
+				for (int i = 0; i < fsostr.split("\r\n").length; i++) {
+					String string = fsostr.split("\r\n")[i];
+	
+					 Matcher m = Pattern.compile(
+	                         Pattern.quote("Bytes")
+	                         + "(.*?)"
+	                         + Pattern.quote("bits")
+	                ).matcher(string);
+					while(m.find()){
+						String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
+						if (tokens[1].contentEquals("M"))
+							fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])));
+						else if (tokens[1].contentEquals("K"))
+							fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						 //here you insert 'match' into the list
+					}
+				}	
 			}
-			try {
-				weather.setWeatherOutputData();
-			    jsonout = weather.getWeatherDataDBObject();
-			}catch (Exception e) {
-				// TODO: handle exception
-			}
+			if(!(rfstr=="0.0")) {
+				for (int i = 0; i < rfstr.split("\r\n").length; i++) {
+					String string = rfstr.split("\r\n")[i];
+	
+					 Matcher m = Pattern.compile(
+	                         Pattern.quote("Bytes")
+	                         + "(.*?)"
+	                         + Pattern.quote("bits")
+	                ).matcher(string);
+					while(m.find()){
+						String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
+						if (tokens[1].contentEquals("M"))
+							rfparse = Float.toString((float) (Float.parseFloat(tokens[0])));
+						else if (tokens[1].contentEquals("K"))
+							rfparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						
+						 //System.out.println("RF: "+rfparse);
+						 //here you insert 'match' into the list
+					}
+				}
+			}			
 		    //System.out.println(jsonout);
 			jsonout.put("time", currentTime);
 			jsonout.put("RF", rfparse);
