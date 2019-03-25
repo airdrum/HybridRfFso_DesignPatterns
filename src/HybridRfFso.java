@@ -33,7 +33,7 @@ public class HybridRfFso {
 		DBObject jsonout = null;
 
 		
-		//SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+//		SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
 		SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
@@ -87,11 +87,17 @@ public class HybridRfFso {
 	                         + Pattern.quote("bits")
 	                ).matcher(string);
 					while(m.find()){
-						String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
-						if (tokens[1].contentEquals("M"))
-							fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])));
-						else if (tokens[1].contentEquals("K"))
-							fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						try {
+							String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
+							if (tokens[1].contentEquals("M"))
+								fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])));
+							else if (tokens[1].contentEquals("K"))
+								fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
+						
 						 //here you insert 'match' into the list
 					}
 				}	
@@ -107,10 +113,15 @@ public class HybridRfFso {
 	                ).matcher(string);
 					while(m.find()){
 						String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
-						if (tokens[1].contentEquals("M"))
-							rfparse = Float.toString((float) (Float.parseFloat(tokens[0])));
-						else if (tokens[1].contentEquals("K"))
-							rfparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						try {
+							if (tokens[1].contentEquals("M"))
+								rfparse = Float.toString((float) (Float.parseFloat(tokens[0])));
+							else if (tokens[1].contentEquals("K"))
+								rfparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
 						
 						 //System.out.println("RF: "+rfparse);
 						 //here you insert 'match' into the list
@@ -123,11 +134,19 @@ public class HybridRfFso {
 			jsonout.put("FSO", fsoparse);
 		    System.out.println(jsonout.get("time")+
 		    		",FSO:"+jsonout.get("FSO")+
-		    		",RF:"+jsonout.get("RF")+
-		    		",SolarRadiation:"+jsonout.get("SolarRadiation")+
-		    		",WindSpeed:"+jsonout.get("WindSpeed")+
-		    		",WindDirection:"+jsonout.get("WindDirection")+
-		    		",OutsideTemperature:"+jsonout.get("OutsideTemperature")); 
+		    		",RF:"+jsonout.get("RF")
+		    		 +",Bar:"+jsonout.get("Barometer")
+				    +",InTemp:"+jsonout.get("InsideTemperature")
+				    +",InHum:"+ jsonout.get("InsideHumidity")
+				    +",OutTemp:"+ jsonout.get("OutsideTemperature")
+				    +",WindS:"+ jsonout.get("WindSpeed")
+		    		+",WindD:"+ jsonout.get("WindDirection")
+		    		+",OutHum:"+ jsonout.get("OutsideHumidity")
+		    		+",UV:"+ jsonout.get("UV")
+		    		+",SolRad:"+ jsonout.get("SolarRadiation")
+		    		+",SunR:"+ jsonout.get("SunRise")
+		    		+",SunS:"+ jsonout.get("SunSet")
+		    		+",Temp:"+ jsonout.get("Temperature"));
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
 		}

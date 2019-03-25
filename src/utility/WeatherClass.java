@@ -45,10 +45,21 @@ public class WeatherClass {
 				}
 				
 			}
-		  private static int[] dataLengths = { 9,11,13,15,17,21,39,49,51,53,111 };
+		  private static int[] dataLengths = { 9,11,13,15,17,21,39,51,53,105,107,117 };
 
 		  private static boolean weatherRetval = false;
-		  private static float[] dataMultipliers = { 0.001f, 0.1f,1,0.1f,1,1,1,0.01f,1,1,1 };
+		  private static float[] dataMultipliers = { 0.001f, 
+				  									0.1f,
+				  									1,
+				  									0.1f,
+				  									1,
+				  									1,
+				  									1,
+				  									1,
+				  									1,
+				  									1,
+				  									1,
+				  									0.1f};
 		  static float[] outputArray = new float[dataLengths.length];
 		  private static Socket socket = null;
 		  private static byte[] socketMAC_addr = { 0x01, 0x04, 0x00, 0x00, 0x00, 0x3e, 0x71, (byte) 0xda };
@@ -72,20 +83,20 @@ public class WeatherClass {
 			  
 		  }
 		  
-		  private static String getBarometer() {return String.valueOf(outputArray[0]);}
-		  private static String getInTemp() {return String.valueOf(outputArray[1]);}
-		  private static String getInHumidity() {return String.valueOf(outputArray[2]);}
-		  private static String getOutTemp() {return String.valueOf(outputArray[3]);}
-		  private static String getWindSpeed() {return String.valueOf(outputArray[4]);}
-		  private static String getWindDir() {return String.valueOf(outputArray[5]);}
-		  private static String getOutHumidity() {return String.valueOf(outputArray[6]);}
-		  private static String getRainRate() {return String.valueOf(outputArray[7]);}
-		  private static String getUv() {return String.valueOf(outputArray[8]);}
-		  private static String getSolarPow() {return String.valueOf(outputArray[9]);}
-		  private static String getAge() {return String.valueOf(outputArray[10]);}
-		
-		  
-		  public  DBObject getWeatherDataDBObject()
+		  private static String getBarometer() {return String.valueOf(outputArray[0]);} //0.001
+		  private static String getInTemp() {return String.valueOf(outputArray[1]);}//0.1
+		  private static String getInHumidity() {return String.valueOf(outputArray[2]);}//1
+		  private static String getOutTemp() {return String.valueOf(outputArray[3]);}//0.1
+		  private static String getWindSpeed() {return String.valueOf(outputArray[4]);}//1
+		  private static String getWindDir() {return String.valueOf(outputArray[5]);}//1
+		  private static String getOutHumidity() {return String.valueOf(outputArray[6]);}//1
+		  private static String getUv() {return String.valueOf(outputArray[7]);}//1
+		  private static String getSolarPow() {return String.valueOf(outputArray[8]);}//1
+		  private static String getSunrise() {return String.valueOf(outputArray[9]);}//1
+		  private static String getSunset() {return String.valueOf(outputArray[10]);}//1
+		  private static String getTemp() {return String.valueOf(outputArray[11]);}//0.1
+		  @SuppressWarnings("unchecked")
+		public  DBObject getWeatherDataDBObject()
 		  {
 		
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -93,8 +104,7 @@ public class WeatherClass {
 			JSONObject objName = new JSONObject();
 			
 
-		    Date date = new Date();
-		    String currentTime = df.format(date);
+		    
 
 		    objName.put("Barometer", getBarometer());
 		    objName.put("InsideTemperature", getInTemp());
@@ -103,11 +113,11 @@ public class WeatherClass {
 		    objName.put("WindSpeed", getWindSpeed());
     		objName.put("WindDirection", getWindDir());
     		objName.put("OutsideHumidity", getOutHumidity());
-    		objName.put("RainRate", getRainRate());
     		objName.put("UV", getUv());
     		objName.put("SolarRadiation", getSolarPow());
-    		objName.put("Age", getAge());
-    		
+    		objName.put("SunRise", getSunrise());
+    		objName.put("SunSet", getSunset());
+    		objName.put("Temperature", getTemp());
 		    StringWriter out = new StringWriter();
 		    try {
 				objName.writeJSONString(out);
@@ -153,7 +163,7 @@ public class WeatherClass {
 				} catch (IOException e2) {
 					// TODO Auto-generated catch block
 					try {
-						output.flush();
+
 						output.write(socketMAC_addr);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
