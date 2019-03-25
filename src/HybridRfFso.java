@@ -33,18 +33,18 @@ public class HybridRfFso {
 		DBObject jsonout = null;
 
 		
-		SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+		//SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
 		SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
 		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
-		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t9999999 -p5000 &");
-//		try {
-//			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t9999999 -p5000 &"});
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t9999999 -p5000 &");
+		try {
+			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t9999999 -p5000 &"});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.2.177 -u -b50M -i1 -t60 -p5000&");
 		
 		
