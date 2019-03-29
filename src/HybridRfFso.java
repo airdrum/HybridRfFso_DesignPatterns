@@ -38,9 +38,9 @@ public class HybridRfFso {
 		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
 		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
-		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t9999999 -p5000 &");
+//		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b30M -i1 -t100 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t30 -p5000 &");
 		try {
-			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t9999999 -p5000 &"});
+			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t3600 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t3600 -p5000 &"});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,9 +53,12 @@ public class HybridRfFso {
 //		}
 		WeatherClass weather = new WeatherClass();
 		String fsostr,rfstr,fsoparse="",rfparse="";
-		while(true) {
-			fsoparse="";
-			rfparse="";
+		boolean fsobool = true; 
+		boolean rfbool=true;
+		while(fsobool||rfbool) {
+			
+			fsoparse="0.0";
+			rfparse="0.0";
 			weather.clearWeatherArray();
 			weather.setWeatherOutputData();
 		    jsonout = weather.getWeatherDataDBObject();
@@ -65,19 +68,26 @@ public class HybridRfFso {
 			JSONObject objName = new JSONObject();
 			try {
 				fsostr = sshMngrfso.recvData();
+				if (fsostr.isEmpty()) {
+					fsobool = false;
+				}
 			}catch (Exception e) {
 				// TODO: handle exception
 				fsostr = "0.0";
-				fsoparse = "0.0";
+
 			}
 			try {
 				rfstr = sshMngrrf.recvData();
+				if (rfstr.isEmpty()) {
+					rfbool = false;
+				}
 			}catch (Exception e) {
 				rfstr = "0.0";
-				rfparse ="0.0";
+
 			}
 			
 			if(!(fsostr=="0.0")) {
+				
 				for (int i = 0; i < fsostr.split("\r\n").length; i++) {
 					String string = fsostr.split("\r\n")[i];
 	
@@ -86,6 +96,8 @@ public class HybridRfFso {
 	                         + "(.*?)"
 	                         + Pattern.quote("bits")
 	                ).matcher(string);
+
+						
 					while(m.find()){
 						try {
 							String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
@@ -94,11 +106,10 @@ public class HybridRfFso {
 							else if (tokens[1].contentEquals("K"))
 								fsoparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
 						} catch (Exception e) {
-							// TODO: handle exception
+							fsoparse = "0.0";
 						}
 						
-						
-						 //here you insert 'match' into the list
+					
 					}
 				}	
 			}
@@ -119,7 +130,7 @@ public class HybridRfFso {
 							else if (tokens[1].contentEquals("K"))
 								rfparse = Float.toString((float) (Float.parseFloat(tokens[0])*0.001));
 						} catch (Exception e) {
-							// TODO: handle exception
+							rfparse="0.0";
 						}
 						
 						
@@ -150,6 +161,7 @@ public class HybridRfFso {
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
 		}
+		System.exit(0);
 	}
 
 }
