@@ -40,7 +40,7 @@ public class HybridRfFso {
 		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
 //		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b30M -i1 -t100 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t30 -p5000 &");
 		try {
-			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t3600 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t3600 -p5000 &"});
+			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t10000 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t10000 -p5000 &"});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,8 +57,7 @@ public class HybridRfFso {
 		boolean rfbool=true;
 		while(fsobool||rfbool) {
 			
-			fsoparse="0.0";
-			rfparse="0.0";
+			
 			weather.clearWeatherArray();
 			weather.setWeatherOutputData();
 		    jsonout = weather.getWeatherDataDBObject();
@@ -154,10 +153,7 @@ public class HybridRfFso {
 		    		+",WindD:"+ jsonout.get("WindDirection")
 		    		+",OutHum:"+ jsonout.get("OutsideHumidity")
 		    		+",UV:"+ jsonout.get("UV")
-		    		+",SolRad:"+ jsonout.get("SolarRadiation")
-		    		+",SunR:"+ jsonout.get("SunRise")
-		    		+",SunS:"+ jsonout.get("SunSet")
-		    		+",Temp:"+ jsonout.get("Temperature"));
+		    		+",SolRad:"+ jsonout.get("SolarRadiation"));
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
 		}
