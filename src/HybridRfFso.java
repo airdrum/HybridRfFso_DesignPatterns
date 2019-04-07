@@ -38,14 +38,15 @@ public class HybridRfFso {
 		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
 		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
+		
 //		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b30M -i1 -t100 -p4000 & iperf -c 192.168.2.177 -u -b30M -i1 -t30 -p5000 &");
 		try {
-			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t10000 -p4000 & iperf -c 192.168.2.177 -u -b45M -i1 -t10000 -p5000 &"});
+			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t3600 -p4000 & iperf -c 192.168.2.177 -u -b40M -i1 -t3600 -p5000 &"});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//sshMngr.sendCommand("killall iperf;iperf -c 192.168.2.177 -u -b50M -i1 -t60 -p5000&");
+//		sshMngr.sendCommand("killall iperf;iperf -c 192.168.2.177 -u -b50M -i1 -t60 -p5000&");
 		
 		
 //		for (int i = 0; i < settings.size(); i++) {
@@ -53,11 +54,11 @@ public class HybridRfFso {
 //		}
 		WeatherClass weather = new WeatherClass();
 		String fsostr,rfstr,fsoparse="",rfparse="";
+		
 		boolean fsobool = true; 
 		boolean rfbool=true;
+		
 		while(fsobool||rfbool) {
-			
-			
 			weather.clearWeatherArray();
 			weather.setWeatherOutputData();
 		    jsonout = weather.getWeatherDataDBObject();
@@ -67,36 +68,41 @@ public class HybridRfFso {
 			JSONObject objName = new JSONObject();
 			try {
 				fsostr = sshMngrfso.recvData();
+				fsobool = true;
 				if (fsostr.isEmpty()) {
 					fsobool = false;
 				}
 			}catch (Exception e) {
 				// TODO: handle exception
 				fsostr = "0.0";
-
+				fsoparse = "0.0";
+				fsobool = false;
 			}
 			try {
 				rfstr = sshMngrrf.recvData();
+				rfbool = true;
 				if (rfstr.isEmpty()) {
 					rfbool = false;
 				}
 			}catch (Exception e) {
 				rfstr = "0.0";
+				rfparse = "0.0";
+				rfbool = false;
 
 			}
 			
-			if(!(fsostr=="0.0")) {
+			if(fsobool) {
 				
 				for (int i = 0; i < fsostr.split("\r\n").length; i++) {
 					String string = fsostr.split("\r\n")[i];
 	
-					 Matcher m = Pattern.compile(
+					Matcher m = Pattern.compile(
 	                         Pattern.quote("Bytes")
 	                         + "(.*?)"
 	                         + Pattern.quote("bits")
 	                ).matcher(string);
 
-						
+
 					while(m.find()){
 						try {
 							String[] tokens = m.group(1).replaceAll("(^\\s+|\\s+$)", "").split("\\s+");
@@ -112,11 +118,11 @@ public class HybridRfFso {
 					}
 				}	
 			}
-			if(!(rfstr=="0.0")) {
+			if(rfbool) {
 				for (int i = 0; i < rfstr.split("\r\n").length; i++) {
 					String string = rfstr.split("\r\n")[i];
 	
-					 Matcher m = Pattern.compile(
+					Matcher m = Pattern.compile(
 	                         Pattern.quote("Bytes")
 	                         + "(.*?)"
 	                         + Pattern.quote("bits")
@@ -131,10 +137,6 @@ public class HybridRfFso {
 						} catch (Exception e) {
 							rfparse="0.0";
 						}
-						
-						
-						 //System.out.println("RF: "+rfparse);
-						 //here you insert 'match' into the list
 					}
 				}
 			}			
@@ -145,7 +147,6 @@ public class HybridRfFso {
 		    System.out.println(jsonout.get("time")+
 		    		",FSO:"+jsonout.get("FSO")+
 		    		",RF:"+jsonout.get("RF")
-		    		 +",Bar:"+jsonout.get("Barometer")
 				    +",InTemp:"+jsonout.get("InsideTemperature")
 				    +",InHum:"+ jsonout.get("InsideHumidity")
 				    +",OutTemp:"+ jsonout.get("OutsideTemperature")
@@ -156,6 +157,15 @@ public class HybridRfFso {
 		    		+",SolRad:"+ jsonout.get("SolarRadiation"));
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
+		}
+		sshMngrfso.close();
+		sshMngrrf.close();
+		try {
+			Thread.sleep(1000);
+			System.out.println(">> Program Exits...");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		System.exit(0);
 	}
