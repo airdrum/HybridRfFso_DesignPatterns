@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -17,102 +18,153 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.util.JSON;
-public class HybridRfFso {
+
+class FsoThroughput implements Runnable{
+	private static SshClass sshMngrfso = null;
+	public FsoThroughput(SshClass sshMngrfso ) {
+		this.sshMngrfso = sshMngrfso;
+	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-grenerated method stu
-//		
-//		TestLogManager tManager = new TestLogManager();
-//		ArrayList<JSONObject> settings = tManager.getTestSettings();
-//		ArrayList<JSONObject> items = tManager.getTestItems();
-		Mongo mongo = new Mongo("localhost", 27017);
-		DB db = mongo.getDB("mydb");
-		DBCollection collection = db.getCollection("WeatherData");
-		
+	private volatile boolean isTerminated = true;
+	public boolean isTerminated() {
+		return isTerminated;
+	}
 
-		DBObject jsonout = null;
+	public void setTerminated(boolean isTerminated) {
+		this.isTerminated = isTerminated;
+	}
 
-		
-//		SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
-		SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
-		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
-		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i1 -p4000");
-		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i1 -p5000");
-		
-//		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t9999999 -p5000 &");
-		try {
-			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t9999999 -p5000 &"});
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	static Mongo mongo = new Mongo("localhost", 27017);
+	static DB db = mongo.getDB("mydb");
+	static DBCollection collection = db.getCollection("FsoThroughput");
+	
+
+	
+	public static void getThroughput() {
+		JSONObject objName = new JSONObject();
+		String rfLines[]  = sshMngrfso.recvData().split("\\r?\\n");
+		for (String name:rfLines)
+        {
+			String innerFso[]=name.split("\\s+");
+			int indexRf = Arrays.asList(innerFso).indexOf("sec");
+			if (indexRf>0) {
+				System.out.println("FSO: " +innerFso[0]+","+innerFso[indexRf+3]+" "+innerFso[indexRf+4]);
+				objName.put("time",innerFso[0]);
+				objName.put("fso",innerFso[indexRf+3]);
+				objName.put("fsopacket",innerFso[indexRf+4]);
+				DBObject dbObject = (DBObject)JSON.parse(objName.toString());
+			    collection.insert(dbObject);
+			}
+				
+        }
+	}
+	@Override
+	public void run() {
+		while(isTerminated) {
+
+			getThroughput();
+			
+		    try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-//		sshMngr.sendCommand("killall iperf;iperf -c 192.168.2.177 -u -b50M -i1 -t60 -p5000&");
-		
-		
-//		for (int i = 0; i < settings.size(); i++) {
-//			System.out.println(settings.get(i));
-//		}
-		WeatherClass weather = new WeatherClass();
-		String fsostr,rfstr,fsoparse="",rfparse="";
-		
-		boolean fsobool = true; 
-		boolean rfbool=true;
-		
-		while(true) {
+	}
+}
+
+
+
+
+
+class RfThroughput implements Runnable{
+	private static SshClass sshMngrrf = null;
+	public RfThroughput(SshClass sshMngrrf ) {
+		this.sshMngrrf = sshMngrrf;
+	}
+	
+	private volatile boolean isTerminated = true;
+	public boolean isTerminated() {
+		return isTerminated;
+	}
+
+	public void setTerminated(boolean isTerminated) {
+		this.isTerminated = isTerminated;
+	}
+
+	static Mongo mongo = new Mongo("localhost", 27017);
+	static DB db = mongo.getDB("mydb");
+	static DBCollection collection = db.getCollection("RfThroughput");
+	
+
+	
+	public static void getThroughput() {
+		JSONObject objName = new JSONObject();
+		String rfLines[]  = sshMngrrf.recvData().split("\\r?\\n");
+		for (String name:rfLines)
+        {
+			String innerRf[]=name.split("\\s+");
+			int indexRf = Arrays.asList(innerRf).indexOf("sec");
+			if (indexRf>0) {
+				System.out.println("RF: " +innerRf[0]+","+innerRf[indexRf+3]+" "+innerRf[indexRf+4]);
+				objName.put("time",innerRf[0]);
+				objName.put("rf",innerRf[indexRf+3]);
+				objName.put("rfpacket",innerRf[indexRf+4]);
+				DBObject dbObject = (DBObject)JSON.parse(objName.toString());
+			    collection.insert(dbObject);
+			}
+				
+        }
+	}
+	@Override
+	public void run() {
+		while(isTerminated) {
+			
+
+			getThroughput();
+			
+		    try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+class Weather implements Runnable{
+	private volatile boolean isTerminated = true;
+	public boolean isTerminated() {
+		return isTerminated;
+	}
+
+	public void setTerminated(boolean isTerminated) {
+		this.isTerminated = isTerminated;
+	}
+
+	Mongo mongo = new Mongo("localhost", 27017);
+	DB db = mongo.getDB("mydb");
+	DBCollection collection = db.getCollection("WeatherData");
+	
+
+	DBObject jsonout = null;
+	WeatherClass weather = new WeatherClass();
+
+	@Override
+	public void run() {
+		while(isTerminated) {
 			weather.clearWeatherArray();
 			weather.setWeatherOutputData();
 		    jsonout = weather.getWeatherDataDBObject();
-			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			// TODO Auto-generated method stub
+		    DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
 			Date date = new Date();
 		    String currentTime = df.format(date);
-			JSONObject objName = new JSONObject();
-			try {
-				fsostr = sshMngrfso.recvData();
-			}catch (Exception e) {
-				// TODO: handle exception
-				fsostr = "0.0";
-			}
-			try {
-				rfstr = sshMngrrf.recvData();
-			}catch (Exception e) {
-				rfstr = "0.0";
-			}
+		    jsonout.put("time", currentTime);
 			
-			
-			for (int i = 0; i < fsostr.split("\r\n").length; i++) {
-				String string = fsostr.split("\r\n")[i];
-
-				 Matcher m = Pattern.compile(
-                         Pattern.quote("Bytes")
-                         + "(.*?)"
-                         + Pattern.quote("bits")
-                ).matcher(string);
-				while(m.find()){
-					fsoparse = m.group(1);
-					 //System.out.println("FSO: "+fsoparse);
-					 //here you insert 'match' into the list
-				}
-			}	
-			for (int i = 0; i < rfstr.split("\r\n").length; i++) {
-				String string = rfstr.split("\r\n")[i];
-
-				 Matcher m = Pattern.compile(
-                         Pattern.quote("Bytes")
-                         + "(.*?)"
-                         + Pattern.quote("bits")
-                ).matcher(string);
-				while(m.find()){
-					 rfparse = m.group(1);
-					 //System.out.println("RF: "+rfparse);
-					 //here you insert 'match' into the list
-				}
-			}
-			jsonout.put("time", currentTime);
-			jsonout.put("RF", rfparse);
-			jsonout.put("FSO", fsoparse);
-		    System.out.println(jsonout.get("time")+
-		    		",FSO:"+jsonout.get("FSO")+
-		    		",RF:"+jsonout.get("RF")
+		    System.out.println("Weather:" + jsonout.get("time")
 				    +",InTemp:"+jsonout.get("InsideTemperature")
 				    +",InHum:"+ jsonout.get("InsideHumidity")
 				    +",OutTemp:"+ jsonout.get("OutsideTemperature")
@@ -123,7 +175,49 @@ public class HybridRfFso {
 		    		+",SolRad:"+ jsonout.get("SolarRadiation"));
 		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
 		    collection.insert(dbObject);
+		    try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+}
+
+public class HybridRfFso {
+	
+	public static void main(String[] args) {
+
+//		SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+		SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
+		SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
+		sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.1 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
+		sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.1 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
+		
+//		sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t999999 -p4000 & iperf -c 192.168.2.178 -u -b50M -t9999 -p5000 &");
+		try {
+			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9999999 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t9999999 -p5000 &"});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		String fsostr,rfstr,fsoparse="",rfparse="";
+		
+		boolean exitFlag = true; 
+		Weather worker = new Weather();
+		RfThroughput rf= new RfThroughput(sshMngrrf);
+		FsoThroughput fso= new FsoThroughput(sshMngrfso);
+		Thread t1 = new Thread(worker);
+		Thread t2 = new Thread(rf);
+		Thread t3 = new Thread(fso);
+		t1.start();
+		t2.start();
+		t3.start();
+		
+		
 	}
 
 }

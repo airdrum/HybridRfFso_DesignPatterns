@@ -45,7 +45,7 @@ public class WeatherClass {
 				}
 				
 			}
-		  private static int[] dataLengths = { 9,11,13,15,17,21,39,51,53,105,107,117 };
+		  private static int[] dataLengths = { 9,11,13,15,17,21,39,51,53,105,107,117,49 };
 
 		  private static boolean weatherRetval = false;
 		  private static float[] dataMultipliers = { 0.001f, 
@@ -59,7 +59,8 @@ public class WeatherClass {
 				  									1,
 				  									1,
 				  									1,
-				  									0.1f};
+				  									0.1f,
+				  									1};
 		  static float[] outputArray = new float[dataLengths.length];
 		  private static Socket socket = null;
 		  private static byte[] socketMAC_addr = { 0x01, 0x04, 0x00, 0x00, 0x00, 0x3e, 0x71, (byte) 0xda };
@@ -90,6 +91,7 @@ public class WeatherClass {
 		  private static String getWindSpeed() {return String.valueOf(outputArray[4]);}//1
 		  private static String getWindDir() {return String.valueOf(outputArray[5]);}//1
 		  private static String getOutHumidity() {return String.valueOf(outputArray[6]);}//1
+		  private static String getRainrate() {return String.valueOf(outputArray[12]);}//1
 		  private static String getUv() {return String.valueOf(outputArray[7]);}//1
 		  private static String getSolarPow() {return String.valueOf(outputArray[8]);}//1
 		  private static String getSunrise() {return String.valueOf(outputArray[9]);}//1
@@ -118,6 +120,7 @@ public class WeatherClass {
     		objName.put("SunRise", getSunrise());
     		objName.put("SunSet", getSunset());
     		objName.put("Temperature", getTemp());
+    		objName.put("Rainrate", getRainrate());
 		    StringWriter out = new StringWriter();
 		    try {
 				objName.writeJSONString(out);
