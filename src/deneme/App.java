@@ -40,14 +40,20 @@ class FsoThroughput implements Runnable{
 	static double innerFso = 90;
 	double random;
 	public static void getThroughput() {
-		innerFso = innerFso -3 + Math.random() * (3 - (-3));
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		innerFso = innerFso +  0.1*Math.random()*(15);
 		DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
 		Date date = new Date();
 		String currentTime = df.format(date);
 		JSONObject objName = new JSONObject();
-		System.out.println("FSO: " +currentTime+","+Double.toString(Math.round(innerFso)) +",Mbits/sec");
+		System.out.println("FSO: " +currentTime+","+Double.toString(Math.round(innerFso*100.0)/100.0) +",Mbits/sec");
 		objName.put("time",currentTime);
-		objName.put("fso",Double.toString(Math.round(innerFso)));
+		objName.put("fso",Double.toString(Math.round(innerFso*100.0)/100.0));
 		objName.put("fsopacket","Mbits/sec");
 		DBObject dbObject = (DBObject)JSON.parse(objName.toString());
 	    collection.insert(dbObject);
@@ -57,7 +63,6 @@ class FsoThroughput implements Runnable{
 	@Override
 	public void run() {
 		while(isTerminated) {
-
 			getThroughput();
 			
 		    try {
@@ -93,14 +98,22 @@ private static SshClass sshMngrfso = null;
 	static double innerFso = 40;
 	double random;
 	public static void getThroughput() {
-		innerFso = innerFso -3 + Math.random() * (15 - (-15));
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		innerFso = innerFso -0.43 * Math.random();
 		DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
 		Date date = new Date();
 		String currentTime = df.format(date);
 		JSONObject objName = new JSONObject();
-		System.out.println("RF: " +currentTime+","+Double.toString(Math.round(innerFso)) +",Mbits/sec");
+		System.out.println("RF: " +currentTime+","+Double.toString(Math.round(innerFso*100.0)/100.0) +",Mbits/sec");
 		objName.put("time",currentTime);
-		objName.put("rf",Double.toString(Math.round(innerFso)));
+		objName.put("rf",Double.toString(Math.round(innerFso*100.0)/100.0));
 		objName.put("rfpacket","Mbits/sec");
 		DBObject dbObject = (DBObject)JSON.parse(objName.toString());
 	    collection.insert(dbObject);
