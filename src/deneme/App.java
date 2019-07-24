@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +37,7 @@ class FsoThroughput implements Runnable{
 	static Mongo mongo = new Mongo("localhost", 27017);
 	static DB db = mongo.getDB("mydb");
 	static DBCollection collection = db.getCollection("FsoThroughput");
-	
+	static Random rand = new Random(); 
 	static double innerFso = 90;
 	double random;
 	public static void getThroughput() {
@@ -46,7 +47,7 @@ class FsoThroughput implements Runnable{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		innerFso = innerFso +  0.1*Math.random()*(15);
+		innerFso = 94 + rand.nextGaussian()*0.1;
 		DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
 		Date date = new Date();
 		String currentTime = df.format(date);
@@ -96,7 +97,7 @@ private static SshClass sshMngrfso = null;
 	static DBCollection collection = db.getCollection("RfThroughput");
 	
 	static double innerFso = 40;
-	double random;
+	static Random rand = new Random(); 
 	public static void getThroughput() {
 		
 		try {
@@ -106,7 +107,7 @@ private static SshClass sshMngrfso = null;
 			e1.printStackTrace();
 		}
 		
-		innerFso = innerFso -0.43 * Math.random();
+		innerFso = 34 + rand.nextGaussian() *3;
 		DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
 		Date date = new Date();
 		String currentTime = df.format(date);
