@@ -245,19 +245,19 @@ class Weather implements Runnable{
 public class HybridRfFso {
 	
 	public static void main(String[] args) {
-			SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+			//SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
 			SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 			SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 			sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.1 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.1 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
 			
-			sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t1000 -p4000 & iperf -c 192.168.2.178 -u -b50M -t10 -p5000 &");
-	//		try {
-	//			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t9 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t9 -p5000 &"});
-	//		} catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
+			//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t100 -p4000 & iperf -c 192.168.2.178 -u -b50M -t100 -p5000 &");
+			try {
+				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t7200 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t7200 -p5000 &"});
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 	
 			
@@ -288,10 +288,13 @@ public class HybridRfFso {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println("T1: " + t1.isAlive());
+			System.out.println("T2: " + t2.isAlive());
+			System.out.println("T3: " + t3.isAlive());
 			rf.shutdown();
 			fso.shutdown();
 			worker.shutdown();
-			sshMngr.close();
+			//sshMngr.close();
 			sshMngrrf.close();
 			sshMngrfso.close();
 
