@@ -50,8 +50,26 @@ class FsoThroughput implements Runnable{
 		JSONObject objName = new JSONObject();
 		String rfLines[]  = sshMngrfso.recvData().split("\\r?\\n");
 		if(rfLines.length<2) {
-			done = true;
-			System.out.println("*****BYE FSO*******");
+			int retryCount = 0;
+			while(retryCount<3) {
+				System.out.println(">> FSO is retried - " +retryCount);
+				rfLines  = sshMngrfso.recvData().split("\\r?\\n");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(rfLines.length<2)
+					retryCount++;
+				else
+					break;
+			}
+			if(rfLines.length<2) {
+				done = true;
+				System.out.println("----BYE FSO-------");
+			}
+			
 		}
 			
 		for (String name:rfLines)
@@ -125,8 +143,26 @@ class RfThroughput implements Runnable{
 		JSONObject objName = new JSONObject();
 		String rfLines[]  = sshMngrrf.recvData().split("\\r?\\n");
 		if(rfLines.length<2) {
-			done = true;
-			System.out.println("----BYE RF-------");
+			int retryCount = 0;
+			while(retryCount<3) {
+				System.out.println(">> RF is retried - " +retryCount);
+				rfLines  = sshMngrrf.recvData().split("\\r?\\n");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(rfLines.length<2)
+					retryCount++;
+				else
+					break;
+			}
+			if(rfLines.length<2) {
+				done = true;
+				System.out.println("----BYE RF-------");
+			}
+			
 		}
 			
 		for (String name:rfLines)
@@ -221,7 +257,7 @@ class Weather implements Runnable{
 		}
 	}
 	public static void checkTermination() {
-		if((rf.isTerminated()||fso.isTerminated())) {
+		if((rf.isTerminated()&&fso.isTerminated())) {
 			done = true;
 		}
 			
@@ -251,7 +287,7 @@ public class HybridRfFso {
 			sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.1 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.1 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
 			
-			//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t100 -p4000 & iperf -c 192.168.2.178 -u -b50M -t100 -p5000 &");
+			//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.178 -u -b50M -t10 -p5000 &");
 			try {
 				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t7200 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t7200 -p5000 &"});
 			} catch (IOException e) {
