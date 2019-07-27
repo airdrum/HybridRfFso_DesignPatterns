@@ -147,39 +147,95 @@ class Weather implements Runnable{
 		this.isTerminated = isTerminated;
 	}
 
-	Mongo mongo = new Mongo("localhost", 27017);
-	DB db = mongo.getDB("mydb");
-	DBCollection collection = db.getCollection("WeatherData");
+	static Mongo mongo = new Mongo("localhost", 27017);
+	static DB db = mongo.getDB("mydb");
+	static DBCollection collection = db.getCollection("WeatherData");
 	
+	static double innerFso;
+	static double barometer;
+	static double inTemp;
+	static double inHum;
+	static double outTemp;
+	static double windSpeed;
+	static double windDir;
+	static double outHum;
+	static double uv;
+	static double solpow;
+	static double temp;
+	static double rainrate;
+	
+	static Random rand = new Random(); 
+	public static void getThroughput() {
+		
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		barometer = 29+ rand.nextGaussian() *0.03;
+		inTemp=85+ rand.nextGaussian() *3;
+		inHum=47+ rand.nextGaussian() *3;
+		outTemp=79+ rand.nextGaussian() *3;
+		windSpeed=10+ rand.nextGaussian() *5;
+		windDir=180+ rand.nextGaussian() *10;
+		outHum=62+ rand.nextGaussian() *5;
+		uv=30+ rand.nextGaussian() *10;
+		solpow=500+ rand.nextGaussian() *50;
+		
+		DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
+		Date date = new Date();
+		String currentTime = df.format(date);
+		JSONObject objName = new JSONObject();
+		System.out.println("WEATHER: " +currentTime+","
+		+Double.toString(Math.round(barometer*100.0)/100.0)+"," 
+		+Double.toString(Math.round(inTemp*100.0)/100.0)+","
+		+Double.toString(Math.round(inHum*100.0)/100.0) +","
+		+Double.toString(Math.round(outTemp*100.0)/100.0)+","
+		+Double.toString(Math.round(windSpeed*100.0)/100.0) +","
+		+Double.toString(Math.round(windDir*100.0)/100.0)+","
+		+Double.toString(Math.round(outHum*100.0)/100.0) +","
 
-	DBObject jsonout = null;
-	WeatherClass weather = new WeatherClass();
-
+		+Double.toString(Math.round(solpow*100.0)/100.0) +","
+		+Double.toString(Math.round(uv*100.0)/100.0));
+		objName.put("time",currentTime);
+		objName.put("Barometer", Double.toString(Math.round(barometer*100.0)/100.0));
+	    objName.put("InsideTemperature", Double.toString(Math.round(inTemp*100.0)/100.0));
+	    objName.put("InsideHumidity", Double.toString(Math.round(inHum*100.0)/100.0));
+	    objName.put("OutsideTemperature", Double.toString(Math.round(outTemp*100.0)/100.0));
+	    objName.put("WindSpeed", Double.toString(Math.round(windSpeed*100.0)/100.0));
+		objName.put("WindDirection", Double.toString(Math.round(windDir*100.0)/100.0));
+		objName.put("OutsideHumidity", Double.toString(Math.round(outHum*100.0)/100.0));
+		objName.put("UV", Double.toString(Math.round(uv*100.0)/100.0));
+		objName.put("SolarRadiation", Double.toString(Math.round(solpow*100.0)/100.0)); 
+		DBObject dbObject = (DBObject)JSON.parse(objName.toString());
+	    collection.insert(dbObject);
+	/*
+	 * objName.put("Barometer", getBarometer());
+		    objName.put("InsideTemperature", getInTemp());
+		    objName.put("InsideHumidity", getInHumidity());
+		    objName.put("OutsideTemperature", getOutTemp());
+		    objName.put("WindSpeed", getWindSpeed());
+    		objName.put("WindDirection", getWindDir());
+    		objName.put("OutsideHumidity", getOutHumidity());
+    		objName.put("UV", getUv());
+    		objName.put("SolarRadiation", getSolarPow());
+    		objName.put("SunRise", getSunrise());
+    		objName.put("SunSet", getSunset());
+    		objName.put("Temperature", getTemp());
+    		objName.put("Rainrate", getRainrate());    
+	 */
+        
+	}
 	@Override
 	public void run() {
 		while(isTerminated) {
-			weather.clearWeatherArray();
-			weather.setWeatherOutputData();
-		    jsonout = weather.getWeatherDataDBObject();
-			// TODO Auto-generated method stub
-		    DateFormat df = new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS");
-			Date date = new Date();
-		    String currentTime = df.format(date);
-		    jsonout.put("time", currentTime);
+
+			getThroughput();
 			
-		    System.out.println("Weather:" + jsonout.get("time")
-				    +",InTemp:"+jsonout.get("InsideTemperature")
-				    +",InHum:"+ jsonout.get("InsideHumidity")
-				    +",OutTemp:"+ jsonout.get("OutsideTemperature")
-				    +",WindS:"+ jsonout.get("WindSpeed")
-		    		+",WindD:"+ jsonout.get("WindDirection")
-		    		+",OutHum:"+ jsonout.get("OutsideHumidity")
-		    		+",UV:"+ jsonout.get("UV")
-		    		+",SolRad:"+ jsonout.get("SolarRadiation"));
-		    DBObject dbObject = (DBObject)JSON.parse(jsonout.toString());
-		    collection.insert(dbObject);
 		    try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -193,15 +249,15 @@ public class App {
 	public static void main(String[] args) {
 
 
-		//Weather worker = new Weather();
+		Weather worker = new Weather();
 		RfThroughput rf= new RfThroughput();
 		FsoThroughput fso= new FsoThroughput();
 		Thread t1 = new Thread(rf);
 		Thread t2 = new Thread(fso);
-		//Thread t3 = new Thread(fso);
+		Thread t3 = new Thread(worker);
 		t1.start();
 		t2.start();
-		//t3.start();
+		t3.start();
 		
 		
 	}
