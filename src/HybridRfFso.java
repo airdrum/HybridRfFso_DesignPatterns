@@ -95,7 +95,7 @@ class FsoThroughput implements Runnable{
 		while(!done) {
 			try {
 				getThroughput();
-				Thread.sleep(1);
+				Thread.sleep(100);
 			}catch (InterruptedException e) {
 				isTerminated=false;
 			}
@@ -144,7 +144,7 @@ class RfThroughput implements Runnable{
 			int retryCount = 3;
 			System.out.println("---------------------RF--------------");
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -190,7 +190,7 @@ class RfThroughput implements Runnable{
 		while(!done) {
 			try {
 				getThroughput();
-				Thread.sleep(1);
+				Thread.sleep(100);
 			}catch (InterruptedException e) {
 				isTerminated=false;
 			}
@@ -295,7 +295,7 @@ public class HybridRfFso {
 			SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 			SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
 			sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.5 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
-			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
+			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");//////////////////////////////
 			
 			if(debug) {
 				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.178 -u -b50M -t300 -p5000 &");

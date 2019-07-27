@@ -1,6 +1,9 @@
 /jsch-0.1.54.jar
 /json-20170516.jar
-/nodefactory/
+/json-simple-1.1.1.jar
+/mongo-java-driver-3.4.2.jar
+/mongodb-driver-3.4.2.jar
+/FsoTerminalCrawler.class
 /FsoThroughput.class
 /HybridRfFso.class
 /RfThroughput.class
@@ -10,13 +13,8 @@
 /config/
 /deneme/
 /example.xml
-/json-simple-1.1.1.jar
-/mongo-java-driver-3.4.2.jar
-/mongodb-driver-3.4.2.jar
 /mongodb-driver-core-3.4.2.jar
+/nodefactory/
 /nodes.xml
 /testconfig.xml
 /utility/
-/ThreadController$HybridRfFso.class
-/ThreadController.class
-/FsoTerminalCrawler.class
