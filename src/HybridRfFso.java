@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -30,16 +31,11 @@ class FsoThroughput implements Runnable{
 		return done;
 	}
 
-	public void setTerminated(boolean isTerminated) {
-		this.isTerminated = isTerminated;
-	}
 	private volatile static boolean done = false;
-	 
-	  
-	 
-	  public void shutdown() {
-	    done = true;
-	  }
+	
+	public void shutdown() {
+		done = true;
+	}
 	static Mongo mongo = new Mongo("localhost", 27017);
 	static DB db = mongo.getDB("mydb");
 	static DBCollection collection = db.getCollection("FsoThroughput");
@@ -50,12 +46,20 @@ class FsoThroughput implements Runnable{
 		JSONObject objName = new JSONObject();
 		String rfLines[]  = sshMngrfso.recvData().split("\\r?\\n");
 		if(rfLines.length<2) {
-			int retryCount = 0;
+			int retryCount = 3;
+
+			System.out.println("----------------FSOOOOOOO-------");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			while(retryCount<3) {
 				System.out.println(">> FSO is retried - " +retryCount);
 				rfLines  = sshMngrfso.recvData().split("\\r?\\n");
 				try {
-					Thread.sleep(500);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -71,7 +75,6 @@ class FsoThroughput implements Runnable{
 			}
 			
 		}
-			
 		for (String name:rfLines)
         {
 			String innerFso[]=name.split("\\s+");
@@ -98,6 +101,7 @@ class FsoThroughput implements Runnable{
 			}
 			
 		}
+
 		System.out.println("# FSO Stopped.");
 	}
 }
@@ -116,12 +120,6 @@ class RfThroughput implements Runnable{
 	public boolean isTerminated() {
 		return done;
 	}
-
-	public void setTerminated(boolean isTerminated) {
-		this.isTerminated = isTerminated;
-	}
-
-	
 	
 	 private volatile static boolean done = false;
 	 
@@ -143,12 +141,19 @@ class RfThroughput implements Runnable{
 		JSONObject objName = new JSONObject();
 		String rfLines[]  = sshMngrrf.recvData().split("\\r?\\n");
 		if(rfLines.length<2) {
-			int retryCount = 0;
+			int retryCount = 3;
+			System.out.println("---------------------RF--------------");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			while(retryCount<3) {
 				System.out.println(">> RF is retried - " +retryCount);
 				rfLines  = sshMngrrf.recvData().split("\\r?\\n");
 				try {
-					Thread.sleep(500);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -278,59 +283,79 @@ class Weather implements Runnable{
 	}
 }
 
+
+
 public class HybridRfFso {
-	
+	private static final boolean debug = false;
 	public static void main(String[] args) {
-			//SshClass sshMngr = new SshClass("10.100.93.28", "pi","raspberry");
+			SshClass sshMngr;
+			if(debug){
+				sshMngr = new SshClass("10.100.93.15", "pi","raspberry");
+			}
 			SshClass sshMngrrf = new SshClass("10.100.93.16", "pi","raspberry");
 			SshClass sshMngrfso = new SshClass("10.100.93.16", "pi","raspberry");
-			sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.1 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
-			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.1 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
+			sshMngrfso.sendCommand("killall iperf;iperf -s -u -i0.5 -p4000 |ts '%Y%m%d-%H:%M:%.S'");
+			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");
 			
-			//sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.178 -u -b50M -t10 -p5000 &");
-			try {
-				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t7200 -p4000 & iperf -c 192.168.2.178 -u -b40M -i1 -t7200 -p5000 &"});
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(debug) {
+				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.178 -u -b50M -t300 -p5000 &");
+			}else {
+				try {
+					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.178 -u -b50M -i1 -t21600 -p5000 &"});
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			
 			
 	
 			
 			RfThroughput rf= new RfThroughput(sshMngrrf);
 			FsoThroughput fso= new FsoThroughput(sshMngrfso);
 			Weather worker = new Weather(rf,fso);
+
+			
 			Thread t1 = new Thread(worker);
 			Thread t2 = new Thread(rf);
 			Thread t3 = new Thread(fso);
-			t1.start();
-			t2.start();
-			t3.start();
-			try {
-				t1.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				t2.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				t3.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println("T1: " + t1.isAlive());
-			System.out.println("T2: " + t2.isAlive());
-			System.out.println("T3: " + t3.isAlive());
+
+
+			ArrayList<Thread> threadList = new ArrayList<Thread>();
+			threadList.add(t1);
+			threadList.add(t2);
+			threadList.add(t3);
+
+			
+			for (Thread _thread:threadList)
+	        {
+				_thread.start();
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+			
+			for (Thread _thread:threadList)
+	        {
+				try {
+					_thread.join();
+					Thread.sleep(1);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	        }
+			
 			rf.shutdown();
 			fso.shutdown();
 			worker.shutdown();
-			//sshMngr.close();
+
+			if(debug) {
+				sshMngr.close();
+			}
 			sshMngrrf.close();
 			sshMngrfso.close();
 
