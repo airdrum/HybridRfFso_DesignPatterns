@@ -41,61 +41,83 @@ class FsoThroughput implements Runnable{
 	static DBCollection collection = db.getCollection("FsoThroughput");
 	
 
+	private final static Object lock = new Object();
 	
 	public static void getThroughput() {
-		JSONObject objName = new JSONObject();
-		String rfLines[]  = sshMngrfso.recvData().split("\\r?\\n");
-		if(rfLines.length<2) {
-			int retryCount = 3;
-
-			System.out.println("----------------FSOOOOOOO-------");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			while(retryCount<3) {
-				System.out.println(">> FSO is retried - " +retryCount);
-				rfLines  = sshMngrfso.recvData().split("\\r?\\n");
+		synchronized (lock) {
+			JSONObject objName = new JSONObject();
+			String fsoLines[]  = sshMngrfso.recvData().split("\\r?\\n");
+			int count =1;
+			while(fsoLines.length<2) {
+				fsoLines  = sshMngrfso.recvData().split("\\r?\\n");
+	
 				try {
-					Thread.sleep(2000);
+					System.out.println(">> Retry count for FSO: " + count + " at Thread-" + Thread.currentThread().getId());
+					Thread.sleep(500);
+					count++;
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(rfLines.length<2)
-					retryCount++;
-				else
-					break;
-			}
-			if(rfLines.length<2) {
-				done = true;
-				System.out.println("----BYE FSO-------");
-			}
-			
-		}
-		for (String name:rfLines)
-        {
-			String innerFso[]=name.split("\\s+");
-			int indexRf = Arrays.asList(innerFso).indexOf("sec");
-			if (indexRf>0) {
-				System.out.println("FSO: " +innerFso[0]+","+innerFso[indexRf+3]+" "+innerFso[indexRf+4]);
-				objName.put("time",innerFso[0]);
-				objName.put("fso",innerFso[indexRf+3]);
-				objName.put("fsopacket",innerFso[indexRf+4]);
-				DBObject dbObject = (DBObject)JSON.parse(objName.toString());
-			    collection.insert(dbObject);
-			}
 				
-        }
+				
+				if(count>10) {
+					done = true;
+					System.out.println("----BYE FSO-------");
+				} 
+			}
+	//		if(rfLines.length<2) {
+	//			int retryCount = 3;
+	//
+	//			System.out.println("----------------FSOOOOOOO-------");
+	//			try {
+	//				Thread.sleep(1000);
+	//			} catch (InterruptedException e) {
+	//				// TODO Auto-generated catch block
+	//				e.printStackTrace();
+	//			}
+	//			while(retryCount<3) {
+	//				System.out.println(">> FSO is retried - " +retryCount);
+	//				rfLines  = sshMngrfso.recvData().split("\\r?\\n");
+	//				try {
+	//					Thread.sleep(2000);
+	//				} catch (InterruptedException e) {
+	//					// TODO Auto-generated catch block
+	//					e.printStackTrace();
+	//				}
+	//				if(rfLines.length<2)
+	//					retryCount++;
+	//				else
+	//					break;
+	//			}
+	//			if(rfLines.length<2) {
+	//				done = true;
+	//				System.out.println("----BYE FSO-------");
+	//			}
+	//			
+	//		}
+			for (String name:fsoLines)
+	        {
+				String innerFso[]=name.split("\\s+");
+				int indexRf = Arrays.asList(innerFso).indexOf("sec");
+				if (indexRf>0) {
+					System.out.println("FSO: " +innerFso[0]+","+innerFso[indexRf+3]+" "+innerFso[indexRf+4]);
+					objName.put("time",innerFso[0]);
+					objName.put("fso",innerFso[indexRf+3]);
+					objName.put("fsopacket",innerFso[indexRf+4]);
+					DBObject dbObject = (DBObject)JSON.parse(objName.toString());
+				    collection.insert(dbObject);
+				}
+					
+	        }
+		}
 	}
 	@Override
 	public void run() {
 		while(!done) {
 			try {
 				getThroughput();
-				Thread.sleep(100);
+				Thread.sleep(500);
 			}catch (InterruptedException e) {
 				isTerminated=false;
 			}
@@ -135,62 +157,85 @@ class RfThroughput implements Runnable{
 	static DB db = mongo.getDB("mydb");
 	static DBCollection collection = db.getCollection("RfThroughput");
 	
-
+	private final static Object lock = new Object();
 	
 	public static void getThroughput() {
-		JSONObject objName = new JSONObject();
-		String rfLines[]  = sshMngrrf.recvData().split("\\r?\\n");
-		if(rfLines.length<2) {
-			int retryCount = 3;
-			System.out.println("---------------------RF--------------");
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			while(retryCount<3) {
-				System.out.println(">> RF is retried - " +retryCount);
+		synchronized (lock) {
+			JSONObject objName = new JSONObject();
+			String rfLines[]  = sshMngrrf.recvData().split("\\r?\\n");
+			
+			int count =1;
+			while(rfLines.length<2) {
 				rfLines  = sshMngrrf.recvData().split("\\r?\\n");
+
 				try {
-					Thread.sleep(1000);
+					System.out.println("Retry count for RF: " + count + " at Thread-" + Thread.currentThread().getId());
+					Thread.sleep(500);
+					count++;
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(rfLines.length<2)
-					retryCount++;
-				else
-					break;
-			}
-			if(rfLines.length<2) {
-				done = true;
-				System.out.println("----BYE RF-------");
-			}
-			
-		}
-			
-		for (String name:rfLines)
-        {
-			String innerRf[]=name.split("\\s+");
-			int indexRf = Arrays.asList(innerRf).indexOf("sec");
-			if (indexRf>0) {
-				System.out.println("RF: " +innerRf[0]+","+innerRf[indexRf+3]+" "+innerRf[indexRf+4]);
-				objName.put("time",innerRf[0]);
-				objName.put("rf",innerRf[indexRf+3]);
-				objName.put("rfpacket",innerRf[indexRf+4]);
-				DBObject dbObject = (DBObject)JSON.parse(objName.toString());
-			    collection.insert(dbObject);
-			}
 				
-        }
+				if(count>10) {
+					done = true;
+					System.out.println("----BYE RF-------");
+				}
+			}
+
+			
+//			if(rfLines.length<2) {
+//				int retryCount = 3;
+//				System.out.println("---------------------RF--------------");
+//				try {
+//					Thread.sleep(2000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				while(retryCount<3) {
+//					System.out.println(">> RF is retried - " +retryCount);
+//					rfLines  = sshMngrrf.recvData().split("\\r?\\n");
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					if(rfLines.length<2)
+//						retryCount++;
+//					else
+//						break;
+//				}
+//				if(rfLines.length<2) {
+//					done = true;
+//					System.out.println("----BYE RF-------");
+//				}
+//				
+//			}
+				
+			for (String name:rfLines)
+	        {
+				String innerRf[]=name.split("\\s+");
+				int indexRf = Arrays.asList(innerRf).indexOf("sec");
+				if (indexRf>0) {
+					System.out.println("RF: " +innerRf[0]+","+innerRf[indexRf+3]+" "+innerRf[indexRf+4]);
+					objName.put("time",innerRf[0]);
+					objName.put("rf",innerRf[indexRf+3]);
+					objName.put("rfpacket",innerRf[indexRf+4]);
+					DBObject dbObject = (DBObject)JSON.parse(objName.toString());
+				    collection.insert(dbObject);
+				}
+					
+	        }
+		}
 	}
 	@Override
 	public void run() {
 		while(!done) {
 			try {
 				getThroughput();
-				Thread.sleep(100);
+				Thread.sleep(500);
 			}catch (InterruptedException e) {
 				isTerminated=false;
 			}
@@ -298,10 +343,10 @@ public class HybridRfFso {
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");//////////////////////////////
 			
 			if(debug) {
-				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.178 -u -b50M -t300 -p5000 &");
+				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.21 -u -b50M -t300 -p5000 &");
 			}else {
 				try {
-					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.178 -u -b50M -i1 -t21600 -p5000 &"});
+					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.21 -u -b50M -i1 -t21600 -p5000 &"});
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
