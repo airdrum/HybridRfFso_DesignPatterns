@@ -61,9 +61,10 @@ class FsoThroughput implements Runnable{
 				}
 				
 				
-				if(count>10) {
+				if(count>5) {
 					done = true;
 					System.out.println("----BYE FSO-------");
+					break;
 				} 
 			}
 	//		if(rfLines.length<2) {
@@ -177,9 +178,10 @@ class RfThroughput implements Runnable{
 					e.printStackTrace();
 				}
 				
-				if(count>10) {
+				if(count>5) {
 					done = true;
 					System.out.println("----BYE RF-------");
+					break;
 				}
 			}
 
@@ -343,7 +345,7 @@ public class HybridRfFso {
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");//////////////////////////////
 			
 			if(debug) {
-				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.21 -u -b50M -t300 -p5000 &");
+				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t30 -p4000 & iperf -c 192.168.2.21 -u -b50M -t30 -p5000 &");
 			}else {
 				try {
 					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.21 -u -b50M -i1 -t21600 -p5000 &"});
