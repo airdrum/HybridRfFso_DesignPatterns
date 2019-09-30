@@ -122,12 +122,7 @@ public class SshClass{
 	public String recvData() {
 		String strData = "";
 		this.status = false;
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 			try {
 				if(this.mSSHInput !=null ) {
 					//inhere you can use input stream let check have or handet got a data from 
@@ -141,7 +136,12 @@ public class SshClass{
 						
 						//check byte read from input stream
 						int iByteRead = this.mSSHInput.read(btBuffer);
-						
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						//check byte read from input stream
 						iAvailable = iAvailable - iByteRead;
 						strData += new String(btBuffer);

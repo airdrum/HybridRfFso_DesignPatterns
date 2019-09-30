@@ -42,7 +42,7 @@ class FsoThroughput implements Runnable{
 	
 
 	private final static Object lock = new Object();
-	
+	private static ArrayList<String> innerFsoZeroArray = new ArrayList<String>();
 	public static void getThroughput() {
 		synchronized (lock) {
 			JSONObject objName = new JSONObject();
@@ -67,45 +67,29 @@ class FsoThroughput implements Runnable{
 					break;
 				} 
 			}
-	//		if(rfLines.length<2) {
-	//			int retryCount = 3;
-	//
-	//			System.out.println("----------------FSOOOOOOO-------");
-	//			try {
-	//				Thread.sleep(1000);
-	//			} catch (InterruptedException e) {
-	//				// TODO Auto-generated catch block
-	//				e.printStackTrace();
-	//			}
-	//			while(retryCount<3) {
-	//				System.out.println(">> FSO is retried - " +retryCount);
-	//				rfLines  = sshMngrfso.recvData().split("\\r?\\n");
-	//				try {
-	//					Thread.sleep(2000);
-	//				} catch (InterruptedException e) {
-	//					// TODO Auto-generated catch block
-	//					e.printStackTrace();
-	//				}
-	//				if(rfLines.length<2)
-	//					retryCount++;
-	//				else
-	//					break;
-	//			}
-	//			if(rfLines.length<2) {
-	//				done = true;
-	//				System.out.println("----BYE FSO-------");
-	//			}
-	//			
-	//		}
+
 			for (String name:fsoLines)
 	        {
 				String innerFso[]=name.split("\\s+");
-				int indexRf = Arrays.asList(innerFso).indexOf("sec");
-				if (indexRf>0) {
-					System.out.println("FSO: " +innerFso[0]+","+innerFso[indexRf+3]+" "+innerFso[indexRf+4]);
+				int indexFso = Arrays.asList(innerFso).indexOf("sec");
+				if (indexFso>0) {
+					
+					if(innerFso[indexFso+3].contentEquals("0.0") && innerFso[indexFso+4].contentEquals("bits/sec")) {
+						
+						innerFsoZeroArray.add(innerFso[indexFso+3]);
+					}else {
+						innerFsoZeroArray.clear();
+					}
+					
+					if(innerFsoZeroArray.size()>30) {
+						done = true;
+						System.out.println("----BYE FSO because of 0.0 bits/sec for more than 100 counts-------");
+						break;
+					} 
+					System.out.println("FSO: " +innerFso[0]+","+innerFso[indexFso+3]+" "+innerFso[indexFso+4]);
 					objName.put("time",innerFso[0]);
-					objName.put("fso",innerFso[indexRf+3]);
-					objName.put("fsopacket",innerFso[indexRf+4]);
+					objName.put("fso",innerFso[indexFso+3]);
+					objName.put("fsopacket",innerFso[indexFso+4]);
 					DBObject dbObject = (DBObject)JSON.parse(objName.toString());
 				    collection.insert(dbObject);
 				}
@@ -138,7 +122,7 @@ class RfThroughput implements Runnable{
 	public RfThroughput(SshClass sshMngrrf ) {
 		this.sshMngrrf = sshMngrrf;
 	}
-	
+	private static ArrayList<String> innerRfZeroArray = new ArrayList<String>();
 	private static volatile boolean isTerminated = true;
 	public boolean isTerminated() {
 		return done;
@@ -184,43 +168,24 @@ class RfThroughput implements Runnable{
 					break;
 				}
 			}
-
-			
-//			if(rfLines.length<2) {
-//				int retryCount = 3;
-//				System.out.println("---------------------RF--------------");
-//				try {
-//					Thread.sleep(2000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				while(retryCount<3) {
-//					System.out.println(">> RF is retried - " +retryCount);
-//					rfLines  = sshMngrrf.recvData().split("\\r?\\n");
-//					try {
-//						Thread.sleep(1000);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					if(rfLines.length<2)
-//						retryCount++;
-//					else
-//						break;
-//				}
-//				if(rfLines.length<2) {
-//					done = true;
-//					System.out.println("----BYE RF-------");
-//				}
-//				
-//			}
 				
 			for (String name:rfLines)
 	        {
 				String innerRf[]=name.split("\\s+");
 				int indexRf = Arrays.asList(innerRf).indexOf("sec");
 				if (indexRf>0) {
+					if(innerRf[indexRf+3].contentEquals("0.0") && innerRf[indexRf+4].contentEquals("bits/sec")) {
+						
+						innerRfZeroArray.add(innerRf[indexRf+3]);
+					}else {
+						innerRfZeroArray.clear();
+					}
+					
+					if(innerRfZeroArray.size()>30) {
+						done = true;
+						System.out.println("----BYE RF because of 0.0 bits/sec for more than 100 counts-------");
+						break;
+					} 
 					System.out.println("RF: " +innerRf[0]+","+innerRf[indexRf+3]+" "+innerRf[indexRf+4]);
 					objName.put("time",innerRf[0]);
 					objName.put("rf",innerRf[indexRf+3]);
@@ -345,7 +310,7 @@ public class HybridRfFso {
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");//////////////////////////////
 			
 			if(debug) {
-				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t30 -p4000 & iperf -c 192.168.2.21 -u -b50M -t30 -p5000 &");
+				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.21 -u -b10M -t300 -p5000 &");
 			}else {
 				try {
 					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.21 -u -b50M -i1 -t21600 -p5000 &"});
