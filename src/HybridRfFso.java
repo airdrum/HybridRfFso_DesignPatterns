@@ -74,16 +74,17 @@ class FsoThroughput implements Runnable{
 				int indexFso = Arrays.asList(innerFso).indexOf("sec");
 				if (indexFso>0) {
 					
-					if(innerFso[indexFso+3].contentEquals("0.0") && innerFso[indexFso+4].contentEquals("bits/sec")) {
+					if((innerFso[indexFso+3].contentEquals("0.00") || innerFso[indexFso+3].contentEquals("23.5")) && (innerFso[indexFso+4].contentEquals("bits/sec") || innerFso[indexFso+4].contentEquals("Kbits/sec"))) {
 						
 						innerFsoZeroArray.add(innerFso[indexFso+3]);
+						System.out.println(">> ADD FSO Zero array to size: " +innerFsoZeroArray.size() );
 					}else {
 						innerFsoZeroArray.clear();
 					}
 					
 					if(innerFsoZeroArray.size()>30) {
 						done = true;
-						System.out.println("----BYE FSO because of 0.0 bits/sec for more than 100 counts-------");
+						System.out.println("----BYE FSO because of 0.00 bits/sec for more than 30 counts-------");
 						break;
 					} 
 					System.out.println("FSO: " +innerFso[0]+","+innerFso[indexFso+3]+" "+innerFso[indexFso+4]);
@@ -174,16 +175,18 @@ class RfThroughput implements Runnable{
 				String innerRf[]=name.split("\\s+");
 				int indexRf = Arrays.asList(innerRf).indexOf("sec");
 				if (indexRf>0) {
-					if(innerRf[indexRf+3].contentEquals("0.0") && innerRf[indexRf+4].contentEquals("bits/sec")) {
+					if((innerRf[indexRf+3].contentEquals("0.00") || innerRf[indexRf+3].contentEquals("23.5")) && (innerRf[indexRf+4].contentEquals("bits/sec") || innerRf[indexRf+4].contentEquals("Kbits/sec"))) {
 						
 						innerRfZeroArray.add(innerRf[indexRf+3]);
+
+						System.out.println(">> ADD RF Zero array to size: " +innerRfZeroArray.size() );
 					}else {
 						innerRfZeroArray.clear();
 					}
 					
 					if(innerRfZeroArray.size()>30) {
 						done = true;
-						System.out.println("----BYE RF because of 0.0 bits/sec for more than 100 counts-------");
+						System.out.println("----BYE RF because of 0.00 bits/sec for more than 30 counts-------");
 						break;
 					} 
 					System.out.println("RF: " +innerRf[0]+","+innerRf[indexRf+3]+" "+innerRf[indexRf+4]);
@@ -310,7 +313,7 @@ public class HybridRfFso {
 			sshMngrrf.sendCommand("killall iperf;iperf -s -u -i0.5 -p5000 | ts '%Y%m%d-%H:%M:%.S'");//////////////////////////////
 			
 			if(debug) {
-				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b100M -t300 -p4000 & iperf -c 192.168.2.21 -u -b10M -t300 -p5000 &");
+				sshMngr.sendCommand("killall iperf;iperf -c 192.168.100.21 -u -b0 -t300 -p4000 & iperf -c 192.168.2.21 -u -b0 -t300 -p5000 &");
 			}else {
 				try {
 					Process p = Runtime.getRuntime().exec(new String[]{"bash","-c","killall iperf;iperf -c 192.168.100.21 -u -b100M -i1 -t21600 -p4000 & iperf -c 192.168.2.21 -u -b50M -i1 -t21600 -p5000 &"});
