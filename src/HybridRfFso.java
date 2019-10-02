@@ -61,7 +61,7 @@ class FsoThroughput implements Runnable{
 				}
 				
 				
-				if(count>5) {
+				if(count>50) {
 					done = true;
 					System.out.println("----BYE FSO-------");
 					break;
@@ -163,7 +163,7 @@ class RfThroughput implements Runnable{
 					e.printStackTrace();
 				}
 				
-				if(count>5) {
+				if(count>50) {
 					done = true;
 					System.out.println("----BYE RF-------");
 					break;
