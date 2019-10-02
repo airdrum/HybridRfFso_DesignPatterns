@@ -74,7 +74,7 @@ class FsoThroughput implements Runnable{
 				int indexFso = Arrays.asList(innerFso).indexOf("sec");
 				if (indexFso>0) {
 					
-					if((innerFso[indexFso+3].contentEquals("0.00") || innerFso[indexFso+3].contentEquals("23.5")) && (innerFso[indexFso+4].contentEquals("bits/sec") || innerFso[indexFso+4].contentEquals("Kbits/sec"))) {
+					if((innerFso[indexFso+3].contentEquals("0.00") ) && (innerFso[indexFso+4].contentEquals("bits/sec") )) {
 						
 						innerFsoZeroArray.add(innerFso[indexFso+3]);
 						System.out.println(">> ADD FSO Zero array to size: " +innerFsoZeroArray.size() );
@@ -82,7 +82,7 @@ class FsoThroughput implements Runnable{
 						innerFsoZeroArray.clear();
 					}
 					
-					if(innerFsoZeroArray.size()>30) {
+					if(innerFsoZeroArray.size()>200) {
 						done = true;
 						System.out.println("----BYE FSO because of 0.00 bits/sec for more than 30 counts-------");
 						break;
@@ -175,7 +175,7 @@ class RfThroughput implements Runnable{
 				String innerRf[]=name.split("\\s+");
 				int indexRf = Arrays.asList(innerRf).indexOf("sec");
 				if (indexRf>0) {
-					if((innerRf[indexRf+3].contentEquals("0.00") || innerRf[indexRf+3].contentEquals("23.5")) && (innerRf[indexRf+4].contentEquals("bits/sec") || innerRf[indexRf+4].contentEquals("Kbits/sec"))) {
+					if((innerRf[indexRf+3].contentEquals("0.00") ) && (innerRf[indexRf+4].contentEquals("bits/sec") )) {
 						
 						innerRfZeroArray.add(innerRf[indexRf+3]);
 
@@ -184,7 +184,7 @@ class RfThroughput implements Runnable{
 						innerRfZeroArray.clear();
 					}
 					
-					if(innerRfZeroArray.size()>30) {
+					if(innerRfZeroArray.size()>200) {
 						done = true;
 						System.out.println("----BYE RF because of 0.00 bits/sec for more than 30 counts-------");
 						break;
